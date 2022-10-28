@@ -1,0 +1,71 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://Game_Objects/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Draw.gd" type="Script" id=3]
+[ext_resource path="res://Game_Objects/HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://PlayerSession.gd" type="Script" id=5]
+[ext_resource path="res://Enemy_Spawning/WaveSpawner.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Game_Objects/Maps/Arena1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Game_Objects/Mouse_Custom_Sprite.tscn" type="PackedScene" id=8]
+[ext_resource path="res://GunsHandler.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Game_Objects/Enemies/Enemy_Parent_Scene.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Game_Objects/Enemies/Rock_Monster.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Game_Objects/Enemies/Spitter_Monster.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Game_Objects/Enemies/Slime_Monster.tscn" type="PackedScene" id=13]
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Arena1" parent="." instance=ExtResource( 7 )]
+
+[node name="Draw" type="Node2D" parent="Arena1"]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Player" parent="Arena1" instance=ExtResource( 2 )]
+position = Vector2( 2066, 1752 )
+
+[node name="MobSpawner" parent="Arena1" instance=ExtResource( 6 )]
+
+[node name="HUD" parent="Arena1" instance=ExtResource( 4 )]
+
+[node name="PlayerSession" type="Node" parent="Arena1"]
+script = ExtResource( 5 )
+
+[node name="GunsHandler" parent="Arena1" instance=ExtResource( 9 )]
+
+[node name="Enemy" parent="Arena1" instance=ExtResource( 10 )]
+position = Vector2( 2064, 1544 )
+
+[node name="Enemy2" parent="Arena1" instance=ExtResource( 12 )]
+position = Vector2( 2192, 1680 )
+
+[node name="Enemy3" parent="Arena1" instance=ExtResource( 11 )]
+position = Vector2( 1976, 1648 )
+
+[node name="Enemy4" parent="Arena1" instance=ExtResource( 13 )]
+position = Vector2( 2074, 1656 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( -2.38419e-07, -9.53674e-07 )
+rotation = 3.14159
+current = true
+drag_margin_left = 0.95
+drag_margin_top = 0.9
+drag_margin_right = 0.95
+drag_margin_bottom = 0.9
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Mouse" parent="." instance=ExtResource( 8 )]
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="Line2D2" type="Line2D" parent="."]
+default_color = Color( 1, 0.423529, 0, 1 )
+
+[connection signal="draw_from_player_to_mouse" from="Arena1/Draw" to="Arena1/Draw" method="_on_Draw_draw_from_player_to_mouse"]

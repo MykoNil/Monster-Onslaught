@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Enemy_Spawning/WaveSpawner.gd" type="Script" id=1]
+
+[node name="MobSpawner" type="Node"]
+script = ExtResource( 1 )
+
+[node name="SpawnTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="WaveStartDelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
+[connection signal="timeout" from="WaveStartDelayTimer" to="." method="_on_WaveStartDelayTimer_timeout"]

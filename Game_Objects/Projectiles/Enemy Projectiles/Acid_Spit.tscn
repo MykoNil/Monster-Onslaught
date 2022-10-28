@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Game_Objects/Projectiles/Bullets_Parent_Scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Game_Objects/Projectiles/Enemy Projectiles/Acid_Spit.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Enemies/Spitter/AcidSpit.png" type="Texture" id=3]
+
+[node name="AcidSpit" instance=ExtResource( 1 )]
+collision_layer = 0
+script = ExtResource( 2 )
+speed = 720
+
+[node name="Sprite" parent="." index="0"]
+scale = Vector2( -1, -1 )
+texture = ExtResource( 3 )
+
+[node name="HitDetector" parent="." index="3"]
+collision_layer = 16
+collision_mask = 33
