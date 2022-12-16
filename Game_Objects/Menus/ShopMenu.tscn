@@ -1,0 +1,469 @@
+[gd_scene load_steps=27 format=2]
+
+[ext_resource path="res://Game_Objects/Menus/ShopMenu.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Game_Objects/Menus/ShopMenu_Gun_Button_Theme_1.tres" type="Theme" id=3]
+[ext_resource path="res://Game_Objects/Menus/ShopMenuItemButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Game_Objects/Menus/ShopMenu.gd" type="Script" id=5]
+[ext_resource path="res://Game_Objects/Menus/ShopMenu_Tabs_Theme.tres" type="Theme" id=6]
+[ext_resource path="res://Assets/Custom Fonts/Custom_Font.tres" type="DynamicFont" id=7]
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.572549, 0.427451, 0.239216, 1 )
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="Theme" id=2]
+default_font = ExtResource( 1 )
+
+[sub_resource type="Theme" id=3]
+default_font = ExtResource( 1 )
+
+[sub_resource type="StreamTexture" id=4]
+load_path = "res://.import/Shotgun.png-7f8df1478ff360058b40d4615859162b.stex"
+
+[sub_resource type="Theme" id=7]
+
+[sub_resource type="Theme" id=5]
+default_font = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.52549, 0.658824, 0.698039, 0.8 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.219608, 0.815686, 0.286275, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.25098, 0.337255, 0.388235, 0.8 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id=11]
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = SubResource( 8 )
+Button/styles/normal = SubResource( 9 )
+Button/styles/pressed = SubResource( 10 )
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.572549, 0.427451, 0.239216, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 8
+outline_size = 1
+outline_color = Color( 0.0862745, 0.584314, 0.188235, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=15]
+default_font = SubResource( 14 )
+Button/styles/hover = SubResource( 1 )
+Button/styles/normal = SubResource( 12 )
+Button/styles/pressed = SubResource( 13 )
+Label/colors/font_color = Color( 1, 0.960784, 0, 1 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 12
+outline_size = 1
+outline_color = Color( 0.0392157, 0.564706, 0.882353, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=17]
+default_font = SubResource( 16 )
+
+[sub_resource type="DynamicFont" id=18]
+size = 8
+outline_color = Color( 0.0392157, 0.564706, 0.882353, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=19]
+default_font = SubResource( 18 )
+Button/styles/hover = SubResource( 1 )
+Button/styles/normal = SubResource( 12 )
+Button/styles/pressed = SubResource( 13 )
+
+[node name="ShopMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0980392, 0.254902, 0.337255, 1 )
+
+[node name="ShopItems" type="Control" parent="ColorRect"]
+margin_left = 114.0
+margin_top = 176.0
+margin_right = 520.0
+margin_bottom = 350.0
+
+[node name="ShopTabs" type="GridContainer" parent="ColorRect/ShopItems"]
+margin_right = 106.0
+margin_bottom = 170.0
+rect_min_size = Vector2( 110, 0 )
+hint_tooltip = "The craup"
+custom_constants/vseparation = 10
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="WeaponsButton" type="Button" parent="ColorRect/ShopItems/ShopTabs" groups=["weaponstab"]]
+margin_right = 110.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 6 )
+text = "Weapons"
+
+[node name="Panel2" type="Panel" parent="ColorRect/ShopItems/ShopTabs/WeaponsButton"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="SupportButton" type="Button" parent="ColorRect/ShopItems/ShopTabs" groups=["supporttab"]]
+margin_top = 90.0
+margin_right = 110.0
+margin_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 6 )
+text = "Support"
+
+[node name="Button3" type="Button" parent="ColorRect/ShopItems/ShopTabs/SupportButton"]
+margin_top = 60.0
+margin_right = 110.0
+margin_bottom = 110.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 6 )
+text = "3"
+
+[node name="GunsList" type="ScrollContainer" parent="ColorRect/ShopItems"]
+margin_left = 124.0
+margin_top = -58.0
+margin_right = 364.0
+margin_bottom = 291.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/ShopItems/GunsList"]
+margin_right = 230.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 230, 200 )
+custom_constants/separation = 5
+
+[node name="GunInfoButton" type="Button" parent="ColorRect/ShopItems/GunsList/VBoxContainer"]
+visible = false
+margin_right = 230.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 150, 74 )
+theme = ExtResource( 3 )
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -46.0
+margin_top = -24.0
+margin_right = 11.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+custom_constants/margin_right = 20
+custom_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton/MarginContainer"]
+margin_top = 2.0
+margin_right = 47.0
+margin_bottom = 11.0
+theme = SubResource( 2 )
+text = "10/25"
+align = 3
+valign = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -38.0
+margin_right = 9.0
+margin_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+
+[node name="Label" type="Label" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton/MarginContainer2"]
+margin_top = 12.0
+margin_right = 27.0
+margin_bottom = 21.0
+theme = SubResource( 3 )
+text = "1"
+align = 3
+valign = 2
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -60.0
+margin_top = -0.5
+margin_right = -10.0
+margin_bottom = 0.5
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -0.5
+margin_top = -27.0
+margin_right = 0.5
+margin_bottom = 27.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="Label2" type="Label" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+margin_left = 10.0
+margin_top = 5.0
+margin_right = 47.0
+margin_bottom = 8.0
+theme = SubResource( 2 )
+text = "$1000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -62.0
+margin_top = -20.0
+margin_bottom = 20.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/ShopItems/GunsList/VBoxContainer/GunInfoButton"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -62.0
+margin_right = 42.0
+margin_bottom = -30.0
+rect_scale = Vector2( 2, 2 )
+texture = SubResource( 4 )
+
+[node name="Button" parent="ColorRect/ShopItems/GunsList/VBoxContainer" instance=ExtResource( 4 )]
+visible = false
+
+[node name="SupportsList" type="ScrollContainer" parent="ColorRect/ShopItems"]
+visible = false
+margin_left = 124.0
+margin_top = -58.0
+margin_right = 364.0
+margin_bottom = 291.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/ShopItems/SupportsList"]
+margin_right = 230.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 230, 200 )
+custom_constants/separation = 5
+
+[node name="ItemInfoControl" type="Control" parent="ColorRect"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -510.0
+margin_top = -182.0
+margin_right = -104.0
+margin_bottom = 109.0
+
+[node name="Panel" type="Panel" parent="ColorRect/ItemInfoControl"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect/ItemInfoControl"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource( 7 )
+color = Color( 0.503906, 0.251953, 0.251953, 1 )
+
+[node name="GunInfoContainer" type="MarginContainer" parent="ColorRect/ItemInfoControl"]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -23.5
+margin_right = 23.5
+margin_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+
+[node name="GunStatsContainer" type="VBoxContainer" parent="ColorRect/ItemInfoControl"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 36.0
+margin_top = -0.5
+margin_right = 165.0
+margin_bottom = 46.5
+custom_constants/separation = 10
+
+[node name="DamagePerShotLabel" type="Label" parent="ColorRect/ItemInfoControl/GunStatsContainer"]
+margin_right = 129.0
+margin_bottom = 9.0
+theme = SubResource( 5 )
+text = "HP: 70"
+align = 3
+valign = 2
+
+[node name="ShotsPerSecondLabel" type="Label" parent="ColorRect/ItemInfoControl/GunStatsContainer"]
+margin_top = 19.0
+margin_right = 129.0
+margin_bottom = 28.0
+theme = SubResource( 5 )
+text = "--"
+align = 3
+valign = 2
+
+[node name="DamagePerSecondLabel" type="Label" parent="ColorRect/ItemInfoControl/GunStatsContainer"]
+margin_top = 38.0
+margin_right = 129.0
+margin_bottom = 47.0
+theme = SubResource( 5 )
+text = "--"
+align = 3
+valign = 2
+
+[node name="PurchaseButton" type="Button" parent="ColorRect/ItemInfoControl"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -82.0
+margin_top = -37.0
+margin_right = -18.0
+margin_bottom = -17.0
+theme = SubResource( 11 )
+custom_colors/font_color = Color( 0.376471, 0.196078, 0.196078, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Purchase"
+
+[node name="CostLabel" type="Label" parent="ColorRect/ItemInfoControl/PurchaseButton"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -32.0
+margin_top = -39.0
+margin_right = 40.0
+margin_bottom = -25.0
+grow_horizontal = 0
+theme = SubResource( 15 )
+text = "--"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/ItemInfoControl"]
+visible = false
+margin_left = 36.0
+margin_top = 24.0
+margin_right = 76.0
+margin_bottom = 64.0
+
+[node name="GunTexture" type="TextureRect" parent="ColorRect/ItemInfoControl"]
+margin_left = 22.0
+margin_top = 5.0
+margin_right = 152.0
+margin_bottom = 135.0
+rect_rotation = 360.0
+stretch_mode = 6
+
+[node name="Name" type="Label" parent="ColorRect/ItemInfoControl/GunTexture"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 11.0
+margin_top = -4.00002
+margin_right = 43.0
+margin_bottom = 3.99998
+theme = SubResource( 17 )
+text = "--"
+align = 3
+valign = 2
+
+[node name="Description" type="Label" parent="ColorRect/ItemInfoControl"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -167.0
+margin_top = -58.0
+margin_right = 107.0
+margin_bottom = -27.0
+custom_fonts/font = ExtResource( 1 )
+text = "--"
+autowrap = true
+
+[node name="PauseGuideLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -79.0
+margin_top = -46.0
+margin_right = 79.0
+margin_bottom = -32.0
+theme = SubResource( 19 )
+text = "Press space bar to unpause"
+
+[node name="CashLabel" type="Label" parent="."]
+margin_left = 105.0
+margin_top = 56.0
+margin_right = 188.0
+margin_bottom = 70.0
+custom_fonts/font = ExtResource( 7 )
+text = "Cash: 0"
+valign = 1
+uppercase = true
+
+[connection signal="player_cash_changed" from="." to="." method="_on_ShopMenu_player_cash_changed"]
+[connection signal="pressed" from="ColorRect/ItemInfoControl/PurchaseButton" to="." method="_on_PurchaseButton_pressed"]

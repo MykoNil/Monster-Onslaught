@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Game_Objects/Projectiles/Pierce_Bullet.gd" type="Script" id=1]
+[ext_resource path="res://Game_Objects/Projectiles/Bullets_Parent_Scene.tscn" type="PackedScene" id=2]
+
+[node name="Bullet" instance=ExtResource( 2 )]
+script = ExtResource( 1 )
+speed = 1500
+
+[node name="Sprite" parent="." index="0"]
+modulate = Color( 0.960784, 0.145098, 0.0392157, 1 )
+scale = Vector2( 0.5, 0.75 )
+
+[node name="Lifetime" parent="." index="2"]
+wait_time = 0.5

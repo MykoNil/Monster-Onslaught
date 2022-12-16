@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Game_Objects/Enemies/Enemy_Parent_Scene.gd" type="Script" id=1]
+[ext_resource path="res://Animations/Enemies/Common/Walk.tres" type="Animation" id=2]
+[ext_resource path="res://Animations/Enemies/Common/Attack_left.tres" type="Animation" id=3]
+[ext_resource path="res://Animations/Enemies/Common/Attack_right.tres" type="Animation" id=4]
+[ext_resource path="res://Assets/Enemies/Common/Parts/RightArm.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Enemies/Common/Parts/Head.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Enemies/Common/Parts/LeftArm.png" type="Texture" id=8]
+[ext_resource path="res://Animations/Enemies/Spitter/Spitter_Attack.tres" type="Animation" id=9]
+[ext_resource path="res://Animations/Enemies/Spitter/RESET.tres" type="Animation" id=10]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[node name="Enemy" type="KinematicBody2D"]
+position = Vector2( 0, -4 )
+scale = Vector2( 2, 2 )
+collision_layer = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Body" type="Sprite" parent="."]
+position = Vector2( 0, -2 )
+
+[node name="Head" type="Sprite" parent="Body"]
+texture = ExtResource( 7 )
+
+[node name="LeftArm" type="Sprite" parent="Body"]
+texture = ExtResource( 8 )
+
+[node name="RightArm" type="Sprite" parent="Body"]
+texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Attack = ExtResource( 9 )
+anims/Attack_left = ExtResource( 3 )
+anims/Attack_right = ExtResource( 4 )
+anims/RESET = ExtResource( 10 )
+anims/Walk = ExtResource( 2 )
+
+[node name="ChangePathTimer" type="Timer" parent="."]
+
+[node name="RemoveDeadBodyTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 3.0
+target_desired_distance = 5.0
+path_max_distance = 10.0
+navigation_layers = 2
+avoidance_enabled = true
+radius = 50.0
+
+[node name="Line2D" type="Line2D" parent="."]
+default_color = Color( 1, 0.141176, 0.0509804, 1 )
+
+[node name="Line2D2" type="Line2D" parent="."]
+visible = false
+default_color = Color( 0.541176, 0.917647, 0.0431373, 1 )
+
+[connection signal="get_hit" from="." to="." method="_on_Enemy_get_hit"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="ChangePathTimer" to="." method="_on_ChangePathTimer_timeout"]
+[connection signal="timeout" from="RemoveDeadBodyTimer" to="." method="_on_RemoveDeadBodyTimer_timeout"]
+[connection signal="path_changed" from="NavigationAgent2D" to="." method="_on_NavigationAgent2D_path_changed"]
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_NavigationAgent2D_velocity_computed"]

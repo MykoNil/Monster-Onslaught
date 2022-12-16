@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Game_Objects/Guns/Gun_Base_Scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Game_Objects/Guns/Shotgun.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Guns/Shotgun.png" type="Texture" id=3]
+
+[node name="Gun" instance=ExtResource( 1 )]
+scale = Vector2( 2.25, 2.25 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, 3 )
+script = ExtResource( 2 )
+
+[node name="Position2D" parent="." index="0"]
+position = Vector2( 0, 21 )

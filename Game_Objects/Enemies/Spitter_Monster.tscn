@@ -1,0 +1,55 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Game_Objects/Enemies/Enemy_Parent_Scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/RightEye.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/Head.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/Mouth.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/LeftArm.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/RightArm.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/LeftEye.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Enemies/Spitter/Parts/Body.png" type="Texture" id=8]
+[ext_resource path="res://Game_Objects/Enemies/Spitter_Monster.gd" type="Script" id=9]
+[ext_resource path="res://Animations/Enemies/Spitter/Spitter_Attack.tres" type="Animation" id=10]
+
+[node name="Enemy" instance=ExtResource( 1 )]
+script = ExtResource( 9 )
+
+[node name="Body" parent="." index="0"]
+texture = ExtResource( 8 )
+
+[node name="Head" parent="Body" index="0"]
+texture = ExtResource( 3 )
+
+[node name="LeftEye" type="Sprite" parent="Body/Head" index="0"]
+position = Vector2( 1.5, 10.5 )
+texture = ExtResource( 7 )
+offset = Vector2( -1.5, -10.5 )
+
+[node name="RightEye" type="Sprite" parent="Body/Head" index="1"]
+position = Vector2( -1.5, 10.5 )
+rotation = -0.225147
+texture = ExtResource( 2 )
+offset = Vector2( 1.5, -10.5 )
+
+[node name="Mouth" type="Sprite" parent="Body/Head" index="2"]
+z_index = -1
+texture = ExtResource( 4 )
+
+[node name="Position2D" type="Position2D" parent="Body/Head/Mouth" index="0"]
+position = Vector2( 0, 13 )
+
+[node name="LeftArm" parent="Body" index="1"]
+texture = ExtResource( 5 )
+
+[node name="RightArm" parent="Body" index="2"]
+texture = ExtResource( 6 )
+
+[node name="CollisionShape2D" parent="." index="1"]
+z_index = 1
+
+[node name="AnimationPlayer" parent="." index="2"]
+anims/Spitter_Attack = ExtResource( 10 )
+
+[node name="AttackCooldownTimer" type="Timer" parent="." index="8"]
+
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_AttackCooldownTimer_timeout"]
