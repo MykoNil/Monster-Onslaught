@@ -3,7 +3,7 @@ extends "res://Game_Objects/Guns/Gun.gd"
 #Yo
 func _ready():
 	bullet_type = piercing_bullet_1
-	primary_shot_debounce_time = 0.5
+	primary_shot_debounce_time = 1.15#0.125#1.15#0.5
 	
 #	print("Shotgun############")
 	var bullet_info = .get_bullet_info()
@@ -13,6 +13,11 @@ func _ready():
 	hits_per_shot = bullet_info.hits_per_shot
 	damage = bullet_info.damage_per_shot * 4
 	cost = 20
+	
+	# Gun clips/ammo
+	clip_max_size = 5 # 4 bullets per shot, so 20 bullets = (20 / 4) = 5 shots per clip ---- Maybe just do it as cartridges
+	clip_size = clip_max_size
+	ammo = 25
 #	print(damage)
 #	print(bullet_info)
 	
@@ -39,6 +44,7 @@ func shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_dir
 	.shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_directions)
 	
 #	trigger_released = false
+
 	can_shoot = false
 	$PrimaryShotDebounceTimer.start(primary_shot_debounce_time)
 

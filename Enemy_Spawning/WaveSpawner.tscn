@@ -11,5 +11,9 @@ one_shot = true
 [node name="WaveStartDelayTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="StartNextWaveTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
 [connection signal="timeout" from="WaveStartDelayTimer" to="." method="_on_WaveStartDelayTimer_timeout"]
+[connection signal="timeout" from="StartNextWaveTimer" to="." method="_on_StartNextWaveTimer_timeout"]

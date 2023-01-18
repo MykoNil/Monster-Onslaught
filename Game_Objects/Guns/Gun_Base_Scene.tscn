@@ -15,5 +15,9 @@ position = Vector2( 0, 7 )
 
 [node name="SecondaryShotDebounceTimer" type="Timer" parent="."]
 
+[node name="ReloadTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="timeout" from="PrimaryShotDebounceTimer" to="." method="_on_PrimaryShotDebounceTimer_timeout"]
 [connection signal="timeout" from="SecondaryShotDebounceTimer" to="." method="_on_SecondaryShotDebounceTimer_timeout"]
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]

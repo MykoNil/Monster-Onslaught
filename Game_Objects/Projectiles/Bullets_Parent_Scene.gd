@@ -11,11 +11,17 @@ var velocity = Vector2.ZERO
 var can_hit = true
 var bullet
 
+var hit_particle_emitter
+var bullet_can_be_destroyed = false
+var ready_to_destroy_bullet = false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	bullet = self
 	set_physics_process(true)
+	
+	hit_particle_emitter = $CPUParticles2D
 
 
 func init(start_position, direction):
@@ -43,6 +49,12 @@ func _physics_process(delta: float) -> void:
 #			move_direction = move_direction.bounce(collide_info.normal)
 #			move_and_collide(reflect)
 #		print(get_slide_collision(0))
+	
+	if ready_to_destroy_bullet:
+		if not hit_particle_emitter.emitting:
+			bullet_can_be_destroyed = true
+	if bullet_can_be_destroyed:
+		queue_free()
 		
 
 
@@ -50,7 +62,12 @@ func _physics_process(delta: float) -> void:
 
 func bullet_blow_up():
 	# Do some sort of particle effect showing the bullet was destroyed
-	queue_free()
+#	queue_free()
+	move_direction = Vector2(0, 0)
+	hit_particle_emitter.restart()
+	$Sprite.visible = false
+#	hit_particle_emitter.emitting = true
+	ready_to_destroy_bullet = true
 
 
 

@@ -22,7 +22,8 @@ func _ready():
 			"ice": 0.25
 		},
 		"strengths": {
-			"explosion": 0.15
+			"explosion": 0.15,
+			"pierce": 0.85
 		}
 	}
 	print("From slime monster")

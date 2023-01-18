@@ -1,12 +1,30 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Game_Objects/Projectiles/Bullets_Parent_Scene.gd" type="Script" id=1]
 [ext_resource path="res://HitDetector.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Bullets/Basic_1.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Gui/Health_bar_bg.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Effects/Particles/Generic_Round_1.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Effects/Particles/Point.png" type="Texture" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.0
 height = 4.0
+
+[sub_resource type="Curve" id=2]
+max_value = 1024.0
+_data = [ Vector2( 0.0140187, 221.091 ), 0.0, 0.0, 0, 0, Vector2( 1, 249.018 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="ParticlesMaterial" id=3]
+lifetime_randomness = 0.07
+emission_shape = 3
+emission_point_texture = ExtResource( 6 )
+emission_point_count = 1
+flag_disable_z = true
+direction = Vector3( 0, 0, 0 )
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
 
 [node name="Bullet" type="KinematicBody2D"]
 collision_layer = 8
@@ -36,6 +54,38 @@ script = ExtResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
 self_modulate = Color( 0.164706, 0.180392, 0.34902, 1 )
 shape = SubResource( 1 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+visible = false
+z_index = 1
+emitting = false
+amount = 3
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.82
+randomness = 0.16
+lifetime_randomness = 0.1
+local_coords = false
+texture = ExtResource( 4 )
+emission_shape = 4
+emission_points = PoolVector2Array( 0, 0, 0, 0 )
+emission_normals = PoolVector2Array( -0.35, -1.35, -0.35, 1.35 )
+emission_colors = PoolColorArray(  )
+direction = Vector2( 0, 1 )
+spread = 10.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 130.42
+initial_velocity_random = 0.28
+damping_curve = SubResource( 2 )
+scale_amount = 0.12
+color = Color( 0.870588, 0.0784314, 0.0784314, 1 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+visible = false
+amount = 80
+process_material = SubResource( 3 )
+texture = ExtResource( 5 )
 
 [connection signal="timeout" from="Lifetime" to="." method="_on_Lifetime_timeout"]
 [connection signal="body_entered" from="HitDetector" to="." method="_on_HitDetector_body_entered"]

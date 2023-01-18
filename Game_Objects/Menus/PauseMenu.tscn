@@ -1,14 +1,38 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://PauseMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Game_Objects/Menus/ShopMenu.tscn" type="PackedScene" id=3]
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.572549, 0.427451, 0.239216, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[sub_resource type="DynamicFont" id=10]
+outline_size = 1
+outline_color = Color( 0.0392157, 0.564706, 0.882353, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
 font_data = ExtResource( 2 )
 
-[sub_resource type="Theme" id=2]
-default_font = SubResource( 7 )
+[sub_resource type="Theme" id=11]
+default_font = SubResource( 10 )
+Button/styles/hover = SubResource( 1 )
+Button/styles/normal = SubResource( 2 )
+Button/styles/pressed = SubResource( 3 )
 
 [sub_resource type="DynamicFont" id=8]
 size = 24
@@ -44,7 +68,7 @@ margin_left = 213.0
 margin_top = 200.0
 margin_right = 482.0
 margin_bottom = 269.0
-theme = SubResource( 2 )
+theme = SubResource( 11 )
 text = "Return to Main Menu"
 
 [node name="OpenShopButton" type="Button" parent="."]
@@ -57,7 +81,7 @@ margin_top = 202.0
 margin_right = -292.0
 margin_bottom = 271.0
 rect_pivot_offset = Vector2( 0, 34 )
-theme = SubResource( 2 )
+theme = SubResource( 11 )
 text = "SHOP"
 
 [node name="Label" type="Label" parent="."]

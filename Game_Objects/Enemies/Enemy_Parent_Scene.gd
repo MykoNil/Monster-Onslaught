@@ -24,9 +24,12 @@ var damage_effectors = {
 		"ice": 0.25
 	},
 	"strengths": {
-		"pierce": 0.1,
+		"pierce": 0.1, # The slime for example, doesn't have armor, but has resistance to piercing damage
 		"explosion": 0.75
 	}
+}
+var attack_effectors = {
+	
 }
 
 # Then to access

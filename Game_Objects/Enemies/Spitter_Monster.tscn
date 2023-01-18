@@ -27,7 +27,6 @@ offset = Vector2( -1.5, -10.5 )
 
 [node name="RightEye" type="Sprite" parent="Body/Head" index="1"]
 position = Vector2( -1.5, 10.5 )
-rotation = -0.225147
 texture = ExtResource( 2 )
 offset = Vector2( 1.5, -10.5 )
 

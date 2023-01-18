@@ -12,6 +12,11 @@ func _ready():
 	shots_per_second = bullet_info.shots_per_second
 	cost = 0
 	
+	# Gun clips/ammo
+	clip_max_size = 24
+	clip_size = clip_max_size
+	ammo = clip_max_size * 6
+	
 #	bullet_with_info.queue_free()
 	
 	gun_name = "Pistol"

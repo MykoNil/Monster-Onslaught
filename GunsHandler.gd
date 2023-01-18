@@ -15,6 +15,7 @@ var gun_hold_position_node
 
 var arena_node
 var scene_tree
+var HUD_node
 
 
 # Member variables for handling the purchasing, ownership, and equipping of weapons
@@ -22,6 +23,7 @@ var can_drop_weapons = false
 var gun_equipped
 # Array for weapons owned
 var weapons_owned = []
+var weapons_equipped = []
 #var weapons_carried = []
 var equipped_gun_index = 0
 
@@ -34,11 +36,13 @@ func _ready():
 	gun_hold_position_node = player_node.get_node("GunHoldPosition")
 
 	arena_node = player_node.get_node("..")
+	HUD_node = scene_tree.get_root().get_node("Main/Arena1/HUD")
 
 	# Give player pistol to start the game
 	give_player_gun_from_scene(pistol_scene)
 
 	gun_equipped = player_node.get_node("Gun")
+	weapons_equipped.push_back(gun_equipped)
 #	weapons_owned.push_back(gun_equipped)
 
 	# For testing: give the player ownership of all the guns
@@ -46,6 +50,8 @@ func _ready():
 #	var uzi_instance = uzi_scene.instance()
 #	weapons_owned.push_back(uzi_instance)
 	weapons_owned.push_back(shotgun_scene.instance())
+	
+	
 #	for i in range(0, 2):
 
 #func initialize():
@@ -96,6 +102,8 @@ func give_player_gun_from_instance(gun_instance):
 	gun_instance.position = gun_hold_position_node.position
 	player_node.gun = gun_instance
 	gun_equipped = gun_instance
+	HUD_node.emit_signal("gun_clip_ammo_changed", gun_instance.clip_size, gun_instance.ammo)
+	HUD_node.emit_signal("weapon_equipped", gun_instance)
 
 func give_player_gun_from_scene(gun_scene):
 	var gun_instance = gun_scene.instance()
@@ -103,6 +111,8 @@ func give_player_gun_from_scene(gun_scene):
 	gun_instance.position = gun_hold_position_node.position
 	player_node.gun = gun_instance
 	gun_equipped = gun_instance
+	HUD_node.emit_signal("gun_clip_ammo_changed", gun_instance.clip_size, gun_instance.ammo)
+	HUD_node.emit_signal("weapon_equipped", gun_instance)
 
 func pickup_weapon():
 	var pickup_distance = 100 #pixels
@@ -143,19 +153,27 @@ func switch_weapon(direction):
 	direction = sign(direction)
 	
 	equipped_gun_index += direction
+#	print("Equipped gun index: " + str(equipped_gun_index))
 	
-	if weapons_owned.size() > 1: # If there is more than 1 weapon owned
-		if equipped_gun_index > weapons_owned.size()-1: # Weapon exists to the right, otherwise, go to end of array to loop through the weapons
+	if weapons_equipped.size() > 1: # If there is more than 1 weapon equipped
+		if equipped_gun_index > weapons_equipped.size()-1: # Weapon exists to the right, otherwise, go to end of array to loop through the weapons
 			equipped_gun_index = 0
 		elif equipped_gun_index < 0:
-			equipped_gun_index = weapons_owned.size()-1
+			equipped_gun_index = weapons_equipped.size()-1
+		
+		# Stop the gun's timer from working then switch gun
+		gun_equipped.need_to_reload = false
+		gun_equipped.get_node("ReloadTimer").stop()
+		
 		# Now switch the weapon from the player's hand and put other weapon in their hand
 		player_node.remove_child(gun_equipped)
-		give_player_gun_from_instance(weapons_owned[equipped_gun_index])
+		give_player_gun_from_instance(weapons_equipped[equipped_gun_index])
 #		gun_equipped = weapons_owned[equipped_gun_index]
+	else:
+		equipped_gun_index = 0
 		
 		
-	
+#	print("Equipped gun index: " + str(equipped_gun_index))
 
 
 

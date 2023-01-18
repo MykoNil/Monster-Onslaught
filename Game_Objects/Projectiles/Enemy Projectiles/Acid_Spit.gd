@@ -1,11 +1,19 @@
 extends "res://Game_Objects/Projectiles/Bullets_Parent_Scene.gd"
 
-var damage_effects = ["poison"]
+var attack_status_effects = {
+	"poison" : {
+		"damage" : 1,
+		"time" : 5
+	}
+}
 
 func _ready():
 	speed = 300
 	damage = 3
 	pierce = 0
+#	attack_effectors = { # {"effect name" : [damage, seconds active]}
+#		"poison" : [1]
+#	}
 #	damage_effects = ["poison"]
 
 func bullet_hit_object(body):

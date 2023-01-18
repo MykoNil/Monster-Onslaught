@@ -21,7 +21,7 @@ var move_velocity = Vector2.ZERO
 export var extra_lives = 3
 export var max_hp = 50
 export var hit_points = 50 setget set_hp, get_hp
-var cash = 0 setget set_cash, get_cash
+var cash = 100 setget set_cash, get_cash
 
 
 var currently_equipped_gun
@@ -60,6 +60,10 @@ var damage_effectors = {
 			
 		}
 	}
+
+# Array with a list of the currently applied effects on the player
+var active_effectors = []
+
 
 
 

@@ -23,6 +23,8 @@ var manual_debounce_cancel = false
 var trigger_released = true
 var can_shoot = true
 
+var need_to_reload = false
+
 var primary_shot_debounce = false
 var secondary_shot_debounce = false
 
@@ -51,6 +53,16 @@ var damage = 1
 var shots_per_second = 1
 var hits_per_shot = 1
 var cost = 1
+# Gun clips/ammo
+var clip_max_size = 60
+var clip_size = clip_max_size setget set_clip_size
+var ammo = 180 setget set_ammo
+
+var reload_time = 2
+
+var HUD_node
+var reload_timer_node
+
 
 var survey_rate_of_shot_timer_counter = 0
 var survey_rate_of_shot_counter = 0
@@ -68,6 +80,9 @@ func _ready() -> void:
 	gun_muzzle = get_node("Position2D")
 	arena_node = get_tree().get_root().get_node("Main/Arena1")#player_node.get_parent()
 	guns_handler_node = get_tree().get_root().get_node("Main/Arena1/GunsHandler")
+	HUD_node = get_tree().get_root().get_node("Main/Arena1/HUD")
+	
+	reload_timer_node = $ReloadTimer
 	
 	# Temporary, for testing
 	bullet_type = homing_missile_1
@@ -92,6 +107,7 @@ func _process(delta: float) -> void:
 	var point_from_gun_to_mouse = mouse_position - global_position
 	var gun_point_to_mouse_length = point_from_gun_to_mouse.length()
 	
+#	if not need_to_reload:
 	if trigger_released and not primary_shot_debounce:
 		can_shoot = true
 	
@@ -99,17 +115,27 @@ func _process(delta: float) -> void:
 		if Input.is_action_pressed("mouse_button1_click"):
 #			survey_speed_of_shot(delta)
 			trigger_released = false
-			if not primary_shot_debounce and can_shoot:
+			if not primary_shot_debounce and can_shoot:# and not need_to_reload:
 				
 				shoot_gun(look_direction, point_from_gun_to_mouse, bullet_type, bullet_directions)
 		elif Input.is_action_just_released("mouse_button1_click"):
+#			if not need_to_reload:
 			if not is_rapid_fire and manual_debounce_cancel:
 				primary_shot_debounce = false
 				trigger_released = true
 			elif not is_rapid_fire:
 				pass
 				trigger_released = true
+#	else:
+#		print("Out of ammo. Need to reload.")
 	
+	if Input.is_action_just_pressed("reload_gun"):
+		reload_gun()
+	
+
+func reload_gun():
+	reload_timer_node.start(reload_time)
+
 
 func survey_speed_of_shot(delta):
 	if survey_rate_of_shot_timer_counter >= 60:
@@ -178,15 +204,30 @@ func shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_dir
 	primary_shot_debounce = true
 	
 	# If the array of directions has something in it
-	if not bullet_dirs.size() > 0:
-		shoot_bullet(bullet_scene, point_from_gun_to_shoot)#point_from_gun_to_mouse
-	else:
-		# spawn as many bullets at as many directions defined
-		for direction in bullet_dirs:
-#			print(direction)
-			shoot_bullet(bullet_scene, direction)
-#			print(sqrt(pow(direction.normalized().x, 2) + pow(direction.normalized().y, 2)))
+	if not need_to_reload and clip_size > 0:
+		if not bullet_dirs.size() > 0:
+			shoot_bullet(bullet_scene, point_from_gun_to_shoot)#point_from_gun_to_mouse
+		else:
+			# spawn as many bullets at as many directions defined
+			for direction in bullet_dirs:
+	#			print(direction)
+				shoot_bullet(bullet_scene, direction)
+	#			print(sqrt(pow(direction.normalized().x, 2) + pow(direction.normalized().y, 2)))
 	
+	# Deal with clip and ammo -------------------------
+	if clip_size > 0:
+		self.clip_size -= 1
+	if clip_size < 0:
+		clip_size = 0
+	
+	if clip_size <= 0: # Out of ammo. Can't shoot. Must reload.
+		if not need_to_reload:
+			if GameSettings.reload_on_empty_clip:
+				need_to_reload = true
+				reload_gun()
+		
+	
+#	HUD_node.emit_signal("gun_clip_ammo_changed", clip_size, ammo)
 	
 #	if shot_type == primary_shot_name:
 #		shot_debounce_time = primary_shot_debounce_time
@@ -204,6 +245,15 @@ func shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_dir
 	
 	
 
+# Listen for changes in the clip and ammo values
+func set_clip_size(new_value):
+	clip_size = new_value
+	HUD_node.emit_signal("gun_clip_ammo_changed", new_value, ammo)
+
+func set_ammo(new_value):
+	ammo = new_value
+	HUD_node.emit_signal("gun_clip_ammo_changed", clip_size, new_value)
+
 
 func get_bullet_info():
 #	bullet_type = straight_bullet_1
@@ -217,9 +267,9 @@ func get_bullet_info():
 #	print("This already went")
 	
 	var bullet_info = {
-		"damage_per_shot" : bullet_with_info.damage,# * bullet_with_info.hit_points,
-		"shots_per_second" : 1 / primary_shot_debounce_time,
-		"hits_per_shot" : bullet_with_info.hit_points
+		"damage_per_shot" : stepify(bullet_with_info.damage, 0.01),# * bullet_with_info.hit_points,
+		"shots_per_second" : stepify(1 / primary_shot_debounce_time, 0.01),
+		"hits_per_shot" : stepify(bullet_with_info.hit_points, 0.01)
 	}
 #	bullet_with_info.queue_free()
 	
@@ -237,5 +287,32 @@ func _on_PrimaryShotDebounceTimer_timeout() -> void:
 
 func _on_SecondaryShotDebounceTimer_timeout() -> void:
 	secondary_shot_debounce = false
+
+# When the time is done and the gun can have its reloaded clip
+func _on_ReloadTimer_timeout() -> void:
+	if ammo > 0 and clip_size < clip_max_size:
+		var add_to_clip_amount = 0
+		
+		self.ammo -= clip_max_size
+		print("Ammo: " + str(ammo))
+		if ammo != clip_max_size:
+			if ammo < 0:
+				add_to_clip_amount = -1 * ammo
+				self.ammo = 0
+			elif ammo >= 0:#> 0:
+				add_to_clip_amount = clip_max_size
+#			elif ammo == 0: # Ammo was the same amount as the clip_max_size
+#				add_to_clip_amount = clip_max_size
+		else:
+			add_to_clip_amount = clip_max_size
+		
+		clip_size = 0
+		self.clip_size += add_to_clip_amount
+		
+		# Make sure the clip has some bullets before letting the player shoot again
+		if clip_size > 0:
+			need_to_reload = false
+	
+
 
 

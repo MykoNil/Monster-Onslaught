@@ -13,19 +13,19 @@ var waves = [
 		{ # sub-wave 1
 			"pre_delay": 3,
 			"enemy_types": [
-				[spitter_enemy_name, 1],
-				[slime_enemy_name, 2],
-				[rock_enemy_name, 1]
+				#[spitter_enemy_name, 1],
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 1]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
 			#one_by_one = false
-			"spawn_rate": 1 #(seconds)
+			"spawn_rate": 3 #(seconds)
 		},
 		{ # sub-wave 2
-			"pre_delay": 3,
+			"pre_delay": 2,
 			"enemy_types": [
-				[slime_enemy_name, 1],
-				[rock_enemy_name, 2],
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 2],
 #				[spitter_enemy_name, 1]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
@@ -38,8 +38,8 @@ var waves = [
 		{ # sub-wave 1
 			"pre_delay": 3,
 			"enemy_types": [
-				[slime_enemy_name, 4],
-				[rock_enemy_name, 4]
+				[slime_enemy_name, 5],
+#				[rock_enemy_name, 4]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
 			#one_by_one = false
@@ -48,12 +48,12 @@ var waves = [
 		{ # sub-wave 2
 			"pre_delay": 3,
 			"enemy_types": [
-				[slime_enemy_name, 5],
-				[rock_enemy_name, 5]
+				[slime_enemy_name, 3],
+#				[rock_enemy_name, 5]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
 			#one_by_one = false
-			"spawn_rate": 1 #(seconds)
+			"spawn_rate": 2 #(seconds)
 		},
 	],
 	
@@ -61,8 +61,8 @@ var waves = [
 		{ # sub-wave 1
 			"pre_delay": 3,
 			"enemy_types": [
-				[slime_enemy_name, 19],
-				[rock_enemy_name, 42]
+				[slime_enemy_name, 3],
+#				[rock_enemy_name, 42]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
 			#one_by_one = false
@@ -71,14 +71,111 @@ var waves = [
 		{ # sub-wave 2
 			"pre_delay": 3,
 			"enemy_types": [
-				[slime_enemy_name, 50],
-				[rock_enemy_name, 55]
+				[slime_enemy_name, 10],
+#				[rock_enemy_name, 55]
 			],
 			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
 			#one_by_one = false
-			"spawn_rate": 0.125 #(seconds)
+			"spawn_rate": 2 #(seconds)
+		},
+		{ # sub-wave 3
+			"pre_delay": 3,
+			"enemy_types": [
+				[slime_enemy_name, 2],
+				[rock_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 4 #(seconds)
 		},
 	],
+	
+	[ # wave 1 ------------------------------------------------------------------------------------------
+		{ # sub-wave 1
+			"pre_delay": 3,
+			"enemy_types": [
+				#[spitter_enemy_name, 1],
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 3 #(seconds)
+		},
+		{ # sub-wave 2
+			"pre_delay": 2,
+			"enemy_types": [
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 2],
+#				[spitter_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 1 #(seconds)
+		},
+	],
+	
+	[ # wave 4 ------------------------------------------------------------------------------------------
+		{ # sub-wave 1
+			"pre_delay": 3,
+			"enemy_types": [
+				#[spitter_enemy_name, 1],
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 3 #(seconds)
+		},
+		{ # sub-wave 2
+			"pre_delay": 2,
+			"enemy_types": [
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 2],
+#				[spitter_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 1 #(seconds)
+		},
+	],
+	
+	[ # wave 5 ------------------------------------------------------------------------------------------
+		{ # sub-wave 1
+			"pre_delay": 3,
+			"enemy_types": [
+				#[spitter_enemy_name, 1],
+				[slime_enemy_name, 3],
+				#[rock_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 3 #(seconds)
+		},
+		{ # sub-wave 2
+			"pre_delay": 2,
+			"enemy_types": [
+				[slime_enemy_name, 5],
+				#[rock_enemy_name, 2],
+#				[spitter_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 1 #(seconds)
+		},
+		{ # sub-wave 3
+			"pre_delay": 4,
+			"enemy_types": [
+				[slime_enemy_name, 2],
+				[rock_enemy_name, 2],
+#				[spitter_enemy_name, 1]
+			],
+			# Introducing a new feature: one-by-one spawning! With this boolean enabled, the sub-wave will spawn an enemy from each type until there's none left in the sub-wave!
+			#one_by_one = false
+			"spawn_rate": 0.5 #(seconds)
+		},
+	],
+	# Add more waves here ----------------
 ]
 
 # ------------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +221,8 @@ var arena_node
 
 var player_node
 
-
+var start_next_wave_timer
+var show_player_wave_ended_animation
 
 
 
@@ -151,6 +249,9 @@ func _ready() -> void:
 	HUD_node = get_node("../HUD")
 	HUD_node.connect("ready", self, "_on_HUD_ready")
 	player_node = get_node("../Player")
+	show_player_wave_ended_animation = HUD_node.get_node("HUDControl/WaveNumLabel/WaveFinishedLabel/AnimationPlayer").get_animation("Wave_Transition_Animation")
+	
+	start_next_wave_timer = $StartNextWaveTimer
 	
 #	set_process(false)
 #	print(waves)
@@ -177,7 +278,12 @@ func _process(delta):
 	if wave_complete:
 		enemies_remaining = this_scene_tree.get_nodes_in_group(enemies_group_name)
 		if enemies_remaining.size() <= 0:
+			# Now play the animation to show the player the next wave is starting
+			HUD_node.emit_signal("inform_player_of_wave_ending", current_wave+1)
+			# Now set timer to start next wave
+			start_next_wave_timer.start(show_player_wave_ended_animation.length)
 			start_next_wave()
+			
 #	print(enemies_remaining)
 
 
@@ -194,7 +300,7 @@ func start_waves(wave_number, sub_waves):
 func start_next_wave():
 	player_node.hit_points = player_node.max_hp
 	self.current_wave += 1
-	$WaveStartDelayTimer.start(waves[current_wave-1][current_sub_wave-1].pre_delay) #Basically triggers the next wave spawning loop
+#	$WaveStartDelayTimer.start(waves[current_wave-1][current_sub_wave-1].pre_delay) #Basically triggers the next wave spawning loop
 	wave_complete = false
 #	print("ese: " + str(current_sub_wave) + ", " + str(current_sub_wave_index))
 
@@ -366,11 +472,15 @@ func set_wave_number(wave_number):
 func get_wave_number():
 	return current_wave
 
+func _on_StartNextWaveTimer_timeout() -> void:
+	$WaveStartDelayTimer.start(waves[current_wave-1][current_sub_wave-1].pre_delay)
 
 
 func issue_game_over(reason):
 	if reason == "Waves complete":
 		print("You finished all the waves! Good job! Game over.")
+
+
 
 
 

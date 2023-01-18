@@ -163,6 +163,7 @@ theme = ExtResource( 6 )
 text = "Support"
 
 [node name="Button3" type="Button" parent="ColorRect/ShopItems/ShopTabs/SupportButton"]
+visible = false
 margin_top = 60.0
 margin_right = 110.0
 margin_bottom = 110.0
