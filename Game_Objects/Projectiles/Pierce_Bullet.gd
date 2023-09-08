@@ -5,6 +5,7 @@ extends "res://Game_Objects/Projectiles/Bullets_Parent_Scene.gd"
 var hit_points = 3 setget set_hp
 var enemies_hit = []
 
+
 #func _ready():
 ##	print("Yee")
 #	print("Craup")
@@ -14,13 +15,16 @@ var enemies_hit = []
 
 func initialize():
 #	print("Craup")
+	knockback_strength = 10 * 60 # x pixels per frame (converted into pixels per second)
 	damage = 5
 	pierce = 10
+	bullet_life_time = 0.5
+	
 
 
 func destroy_bullet():
 	# Bullet has lost all hp. Disable and destroy it
-	bullet.can_hit = false
+	bullet.can_hit = false#bullet.can_hit = false
 	$CollisionShape2D.set_deferred("disabled", true)
 	.bullet_blow_up()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Game_Objects/Enemies/Enemy_Parent_Scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Enemies/Spitter/Parts/RightEye.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Assets/Enemies/Spitter/Parts/Body.png" type="Texture" id=8]
 [ext_resource path="res://Game_Objects/Enemies/Spitter_Monster.gd" type="Script" id=9]
 [ext_resource path="res://Animations/Enemies/Spitter/Spitter_Attack.tres" type="Animation" id=10]
+[ext_resource path="res://Game_Objects/flinch.tres" type="Animation" id=11]
 
 [node name="Enemy" instance=ExtResource( 1 )]
 script = ExtResource( 9 )
@@ -48,6 +49,7 @@ z_index = 1
 
 [node name="AnimationPlayer" parent="." index="2"]
 anims/Spitter_Attack = ExtResource( 10 )
+anims/flinch = ExtResource( 11 )
 
 [node name="AttackCooldownTimer" type="Timer" parent="." index="8"]
 

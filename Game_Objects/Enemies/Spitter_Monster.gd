@@ -22,7 +22,7 @@ var old_anim
 
 func _ready():
 	hit_points = 75
-	attack_damage = 4
+	damage = 4
 	attack_range = 275
 	
 	walk_speed = 90
@@ -52,30 +52,31 @@ func _ready():
 
 
 func _physics_process(delta):
-	var distance_from_target = (target.global_position - global_position).length()
-#	if distance_from_target <= attack_range:
-#		if not can_attack:
-#			animation_player.play("RESET")
-#	var new_anim = animation_player.get_current_animation()
-#	if new_anim != old_anim:
-#		#Animation changed
-#		if new_anim != attack_spitter_anim_name:
-#			pass
-#	if old_anim:
-#		if animation_player.get_current_animation_position() >= animation_player.get_current_animation().length():
-#			print(animation_player.get_current_animation_position())
-#			animation_done = true
-	if state == states[1]: # Walking?
-		animation_done = true
-	elif state == states[2]: # Attacking
-		if can_attack:
-				change_anim(attack_spitter_anim_name, 1.5)
-				old_anim = animation_player.get_animation(animation_player.get_current_animation())
-#				animation_interrupted = false
-				animation_done = false
-		else:
-			if animation_done:
-				animation_player.play("RESET")
+	if can_move:
+		var distance_from_target = (target.global_position - global_position).length()
+	#	if distance_from_target <= attack_range:
+	#		if not can_attack:
+	#			animation_player.play("RESET")
+	#	var new_anim = animation_player.get_current_animation()
+	#	if new_anim != old_anim:
+	#		#Animation changed
+	#		if new_anim != attack_spitter_anim_name:
+	#			pass
+	#	if old_anim:
+	#		if animation_player.get_current_animation_position() >= animation_player.get_current_animation().length():
+	#			print(animation_player.get_current_animation_position())
+	#			animation_done = true
+		if state == states[1]: # Walking?
+			animation_done = true
+		elif state == states[2]: # Attacking
+			if can_attack:
+					change_anim(attack_spitter_anim_name, 1.5)
+					old_anim = animation_player.get_animation(animation_player.get_current_animation())
+	#				animation_interrupted = false
+					animation_done = false
+			else:
+				if animation_done:
+					animation_player.play("RESET")
 
 
 # Activate attack
@@ -99,6 +100,9 @@ func spit_projectile():
 # Check if the enemy's attack animation has finished, then play the next randomized attack animation
 func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 #	print("Test")
+
+	if anim_name == "flinch":
+		can_move = true
 	
 	var distance_from_target = (target.global_position - global_position).length()
 	if distance_from_target > attack_range: # Player is now out of range

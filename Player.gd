@@ -6,6 +6,7 @@ signal get_hit
 signal earn_cash
 signal barricade_popup
 
+signal player_died
 
 
 var viewport
@@ -13,7 +14,7 @@ var screen_size
 var draw_node
 
 # Player variables
-export var walk_speed = 25 #pixels per second
+var walk_speed = 500#450 #pixels per second
 var mouse_position = Vector2.ZERO
 var move_velocity = Vector2.ZERO
 
@@ -21,8 +22,9 @@ var move_velocity = Vector2.ZERO
 export var extra_lives = 3
 export var max_hp = 50
 export var hit_points = 50 setget set_hp, get_hp
-var cash = 100 setget set_cash, get_cash
+var cash = 400 setget set_cash, get_cash
 
+var shot_held = false
 
 var currently_equipped_gun
 var owned_weapons
@@ -42,6 +44,14 @@ var point_from_gun_to_mouse = Vector2.ZERO
 var can_fix_barricade = false
 var in_range_of_barricade = false
 var which_barricade
+
+#var move_direction = Vector2.ZERO
+var move_dir_from_touch_screen = Vector2.ZERO
+var aim_dir_from_touch_screen = Vector2.ZERO
+var aim_distance = 64 * 1.25
+var crosshair_node
+
+var mobile_controls_node
 
 # Load SCENES
 var HUD_node
@@ -65,9 +75,20 @@ var damage_effectors = {
 var active_effectors = []
 
 
+# This value will determine when the GameSettings.control_scheme has changed
+var game_settings_previous_value = -1
+
+
+
+
 
 
 func _ready() -> void:
+#	# Test
+#	game_settings_previous_value = GameSettings.control_scheme
+	
+	mobile_controls_node = get_node("MobileControls")
+	
 	scene_tree = get_tree()
 	screen_size = Vector2.ZERO
 	viewport = get_viewport()
@@ -78,14 +99,19 @@ func _ready() -> void:
 	
 	gun = get_node("Gun")
 	camera = get_node("../../Camera2D")
+	
 #	viewport = camera.get_custom_viewport()
 	
-	HUD_node = get_node("../HUD")
+	HUD_node = get_node("../../HUD")
 	guns_handler_node = get_node("../GunsHandler")
 	shop_menu_node = HUD_node.get_node("PauseMenu/ShopMenu")
 	
+	crosshair_node = get_node("../../Crosshair")
+	
 	# Connect the _ready signal of HUD to _on_HUD_ready()
-	HUD_node.connect("ready", self, "_on_HUD_ready")
+#	HUD_node.connect("ready", self, "_on_HUD_ready")
+	self.hit_points = max_hp
+	HUD_node.emit_signal("initialize_player", hit_points, max_hp, cash)
 	
 	rng.randomize()
 	
@@ -148,7 +174,14 @@ func get_barricade_in_range():
 func _physics_process(delta: float) -> void:
 #	viewport = get_viewport()
 	
+	if game_settings_previous_value != GameSettings.control_scheme: # If at some point the value has changed
+		game_settings_previous_value = GameSettings.control_scheme # Update the value to check for changes with
+		game_settings_value_changed(GameSettings.control_scheme)
+	
 	var move_direction = Vector2.ZERO
+#	print(move_direction)
+	
+	
 	mouse_position = get_global_mouse_position()#viewport.get_mouse_position()
 #
 	var look_direction = mouse_position - global_position
@@ -156,7 +189,7 @@ func _physics_process(delta: float) -> void:
 #	print(position)
 #	print(mouse_position)
 #	var look_dir_length = look_direction.length()
-	look_direction = atan2(look_direction.y, look_direction.x)
+#	look_direction = atan2(look_direction.y, look_direction.x)
 #
 #	var gun_point_to_mouse = mouse_position - gun.global_position
 #	point_from_gun_to_mouse = gun_point_to_mouse
@@ -198,7 +231,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		HUD_node.action_indicator_label.visible = false
 		
-			
+		
 	
 #	# For fixing barricades
 #	is_close_to_barricade()
@@ -281,15 +314,27 @@ func _physics_process(delta: float) -> void:
 #	camera.global_position.y += camera_move_amount.y
 	
 	# Normalize the movement vector
-	move_direction = Vector2(h_dir, v_dir).normalized()
+	if GameSettings.control_scheme == 0:
+		move_direction = Vector2(h_dir, v_dir).normalized() #444444444444444444444444444444444444444444
+	elif GameSettings.control_scheme == 1:
+		move_direction = move_dir_from_touch_screen
 	
 	# Update the player's position
 	move_velocity = move_direction * walk_speed# * delta
 	
+#	move_dir_from_touch_screen = Vector2.ZERO
+	
 	# Update player and camera position
 	move_velocity = move_and_slide(move_velocity)
-	camera.global_position.x += camera_move_amount.x
-	camera.global_position.y += camera_move_amount.y
+#	move_dir_from_touch_screen = Vector2.ZERO
+
+	# Update the camera to smoothly track the player
+	if GameSettings.control_scheme == 1:
+		 camera.position += (position - camera.position) / 20
+	elif GameSettings.control_scheme == 0:
+		camera.global_position.x += camera_move_amount.x
+		camera.global_position.y += camera_move_amount.y
+	
 	
 	
 	# ------------------------------------------------- Camera clipping -------------------------------------------------
@@ -323,12 +368,32 @@ func _physics_process(delta: float) -> void:
 		var distance_from_player = position.y - down_side
 		camera.global_position.y += distance_from_player
 	
+	# Now update the player's rotation
 	
+	if GameSettings.control_scheme == 0: # Keyboard & mouse
+		crosshair_node.global_position = mouse_position
+		look_direction = atan2(look_direction.y, look_direction.x)
+	elif GameSettings.control_scheme == 1:
+		look_direction = aim_dir_from_touch_screen.normalized() * aim_distance
+		crosshair_node.global_position = gun.global_position + look_direction
+		look_direction = atan2(look_direction.y, look_direction.x)
+#	aim_dir_from_touch_screen = Vector2.ZERO
 	rotation = look_direction - deg2rad(90)
 	
 	# Emit signal for drawing a line from the player to the mouse
 #	draw_node.emit_signal("draw_from_player_to_mouse", reference_point + screen_size/2, mouse_position)# position, mouse_position)#gun_muzzle.global_position, mouse_position)
 
+
+
+
+# GameSettings.control_scheme value has changed
+func game_settings_value_changed(new_value):
+	print("CHANGED!!!!!!! New value: " + str(new_value))
+	if new_value == 0: # Keyboard controls
+		mobile_controls_node.display_touchscreen_controls(false)
+	else:
+		mobile_controls_node.display_touchscreen_controls(true)
+	
 
 
 
@@ -404,19 +469,34 @@ func on_death():
 	gun_equipped_from_gun_group.set_process(false)
 	guns_handler_node.set_physics_process(false)
 	
+	# Now emit signal to the wave controller node to end the game.
+	emit_signal("player_died")
+	
 
 
 # Player gets hit
-func _on_Player_get_hit(damage, pierce) -> void:
+func _on_Player_get_hit(enemy) -> void:
 	# Remove health from the player, based on how much damage was dealt
-	self.hit_points -= damage
+	self.hit_points -= enemy.damage
 	print("Player hp: " + str(hit_points))
 	if hit_points <= 0:
 		on_death()
 	
 
 
+func _on_LeftJoystick_use_move_vector(move_vector) -> void:
+	move_dir_from_touch_screen = move_vector
 
+func _on_RightJoystick_use_move_vector(aim_vector) -> void:
+	aim_dir_from_touch_screen = aim_vector
+
+
+#func _on_RightJoystick_holding_shot() -> void:
+#	pass # Replace with function body.
+
+
+func _on_RightJoystick_holding_shot(held_down) -> void:
+	gun.set_shot_held(held_down)
 
 
 

@@ -1,27 +1,31 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://PauseMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Game_Objects/Menus/ShopMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick_Area.png" type="Texture" id=4]
+[ext_resource path="res://Assets/TouchScreen/Pause.png" type="Texture" id=5]
+[ext_resource path="res://Game_Objects/HUD/Generic_HUD_Text_Theme.tres" type="Theme" id=6]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick.png" type="Texture" id=7]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0.572549, 0.427451, 0.239216, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=15]
 bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=16]
 outline_size = 1
 outline_color = Color( 0.0392157, 0.564706, 0.882353, 1 )
 extra_spacing_bottom = 1
@@ -29,17 +33,17 @@ extra_spacing_space = 2
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=11]
-default_font = SubResource( 10 )
-Button/styles/hover = SubResource( 1 )
-Button/styles/normal = SubResource( 2 )
-Button/styles/pressed = SubResource( 3 )
+default_font = SubResource( 16 )
+Button/styles/hover = SubResource( 13 )
+Button/styles/normal = SubResource( 14 )
+Button/styles/pressed = SubResource( 15 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=17]
 size = 24
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=4]
-default_font = SubResource( 8 )
+default_font = SubResource( 17 )
 
 [sub_resource type="DynamicFont" id=9]
 size = 24
@@ -47,6 +51,90 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=6]
 default_font = SubResource( 9 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.364706, 0.231373, 0.466667, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[sub_resource type="DynamicFont" id=8]
+outline_size = 1
+outline_color = Color( 0.0705882, 0.0901961, 0.360784, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=20]
+default_font = SubResource( 8 )
+Button/colors/font_color = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_disabled = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_focus = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_hover = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_pressed = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/styles/hover = SubResource( 10 )
+Button/styles/normal = SubResource( 18 )
+Button/styles/pressed = SubResource( 19 )
+
+[sub_resource type="DynamicFont" id=21]
+extra_spacing_top = 1
+extra_spacing_bottom = 1
+extra_spacing_space = 5
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=22]
+default_font = SubResource( 21 )
+
+[sub_resource type="DynamicFont" id=23]
+extra_spacing_top = 1
+extra_spacing_bottom = 1
+extra_spacing_space = 5
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=24]
+default_font = SubResource( 23 )
+
+[sub_resource type="StyleBoxFlat" id=25]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 0 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=26]
+bg_color = Color( 0.364706, 0.231373, 0.466667, 0 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=27]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 0 )
+
+[sub_resource type="Theme" id=28]
+default_font = SubResource( 8 )
+Button/colors/font_color = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_disabled = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_focus = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_hover = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_pressed = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/styles/hover = SubResource( 25 )
+Button/styles/normal = SubResource( 26 )
+Button/styles/pressed = SubResource( 27 )
+
+[sub_resource type="CircleShape2D" id=12]
+radius = 64.0
 
 [node name="PauseMenu" type="Control"]
 pause_mode = 2
@@ -60,29 +148,40 @@ anchor_bottom = 1.0
 color = Color( 0.12549, 0.313726, 0.415686, 0.545098 )
 
 [node name="ReturnToMenuButton" type="Button" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 213.0
-margin_top = 200.0
-margin_right = 482.0
-margin_bottom = 269.0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -296.0
+margin_top = -93.0
+margin_right = -27.0
+margin_bottom = -24.0
 theme = SubResource( 11 )
 text = "Return to Main Menu"
 
 [node name="OpenShopButton" type="Button" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -480.0
-margin_top = 202.0
-margin_right = -292.0
-margin_bottom = 271.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = -93.0
+margin_right = 220.0
+margin_bottom = -24.0
 rect_pivot_offset = Vector2( 0, 34 )
 theme = SubResource( 11 )
 text = "SHOP"
+
+[node name="ResumeGameButton" type="Button" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -80.0
+margin_top = -8.0
+margin_right = 60.0
+margin_bottom = 126.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 0, 34 )
+icon = ExtResource( 4 )
+flat = true
 
 [node name="Label" type="Label" parent="."]
 anchor_left = 0.5
@@ -109,9 +208,144 @@ margin_bottom = 33.0
 theme = SubResource( 6 )
 text = "Other test button"
 
+[node name="OpenSettingsButton" type="Button" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 256.0
+margin_top = -189.0
+margin_right = 432.0
+margin_bottom = -122.0
+theme = SubResource( 20 )
+text = "OPTIONS"
+icon_align = 1
+
+[node name="InteractTutorial3" type="Label" parent="OpenSettingsButton"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 181.5
+margin_top = -140.0
+margin_right = 562.5
+margin_bottom = -117.0
+grow_horizontal = 2
+theme = ExtResource( 6 )
+text = "Please read the
+tutorial before playing"
+align = 1
+valign = 1
+uppercase = true
+
 [node name="ShopMenu" parent="." instance=ExtResource( 3 )]
 visible = false
 
+[node name="SettingsMenu" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -208, 112 )
+color = Color( 0.505882, 0.647059, 0.427451, 1 )
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsMenu"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 864.0
+margin_top = -61.0
+margin_right = 999.0
+margin_bottom = -18.0
+theme = SubResource( 20 )
+text = "Close"
+icon_align = 1
+
+[node name="ControlsLabel" type="Label" parent="SettingsMenu"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -488.0
+margin_top = -397.0
+margin_right = -109.0
+margin_bottom = -379.0
+grow_horizontal = 2
+theme = SubResource( 22 )
+text = "controls"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="TouchscreenControlsLabel" type="Label" parent="SettingsMenu/ControlsLabel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -85.5
+margin_top = 54.0
+margin_right = 178.5
+margin_bottom = 72.0
+grow_horizontal = 2
+theme = SubResource( 24 )
+text = "touchscreen"
+valign = 1
+uppercase = true
+
+[node name="Button2" type="Button" parent="SettingsMenu/ControlsLabel/TouchscreenControlsLabel"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -16.0
+margin_bottom = 16.0
+theme = SubResource( 28 )
+icon = ExtResource( 7 )
+icon_align = 1
+
+[node name="KeyboardControlsLabel2" type="Label" parent="SettingsMenu/ControlsLabel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -85.5
+margin_top = 102.0
+margin_right = 178.5
+margin_bottom = 120.0
+grow_horizontal = 2
+theme = SubResource( 24 )
+text = "keyboard"
+valign = 1
+uppercase = true
+
+[node name="Button1" type="Button" parent="SettingsMenu/ControlsLabel/KeyboardControlsLabel2"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -16.0
+margin_bottom = 16.0
+theme = SubResource( 28 )
+icon = ExtResource( 7 )
+icon_align = 1
+
+[node name="ResumeButton" type="TouchScreenButton" parent="."]
+position = Vector2( 896, 8 )
+scale = Vector2( 0.5, 0.5 )
+normal = ExtResource( 4 )
+shape = SubResource( 12 )
+shape_visible = false
+action = "pause_game"
+
+[node name="Sprite3" type="Sprite" parent="ResumeButton"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
+offset = Vector2( 16, 16 )
+
 [connection signal="pressed" from="ReturnToMenuButton" to="." method="_on_ReturnToMenuButton_pressed"]
 [connection signal="pressed" from="OpenShopButton" to="." method="_on_OpenShopButton_pressed"]
+[connection signal="button_down" from="ResumeGameButton" to="." method="_on_ResumeGameButton_button_down"]
 [connection signal="pressed" from="TestButton" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="OpenSettingsButton" to="." method="_on_OpenSettingsButton_pressed"]
+[connection signal="pressed" from="SettingsMenu/CloseSettingsButton" to="." method="_on_CloseSettingsButton_pressed"]
+[connection signal="pressed" from="SettingsMenu/ControlsLabel/TouchscreenControlsLabel/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="SettingsMenu/ControlsLabel/KeyboardControlsLabel2/Button1" to="." method="_on_Button1_pressed"]

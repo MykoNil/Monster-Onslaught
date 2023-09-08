@@ -1,15 +1,18 @@
 extends KinematicBody2D
 
-
+var bullet_life_time = 1
 export var damage = 0
 export var speed = 620
 var pierce = 0
+
+var life_time_timer
 
 var move_direction = Vector2.ZERO
 var velocity = Vector2.ZERO
 
 var can_hit = true
 var bullet
+var knockback_strength = 10 * 60 # x pixels per frame (converted into pixels per second) #1700 # Pixels per second
 
 var hit_particle_emitter
 var bullet_can_be_destroyed = false
@@ -22,9 +25,17 @@ func _ready() -> void:
 	set_physics_process(true)
 	
 	hit_particle_emitter = $CPUParticles2D
+	
 
+#func initialize():
+#	if not life_time_timer:
+#		life_time_timer = $Lifetime
+#		life_time_timer.wait_time = bullet_life_time
 
 func init(start_position, direction):
+	if not life_time_timer:
+		life_time_timer = $Lifetime
+		life_time_timer.wait_time = bullet_life_time
 	move_direction = direction
 	position = start_position
 	rotation = move_direction.angle() + deg2rad(90)
@@ -64,7 +75,7 @@ func bullet_blow_up():
 	# Do some sort of particle effect showing the bullet was destroyed
 #	queue_free()
 	move_direction = Vector2(0, 0)
-	hit_particle_emitter.restart()
+#	hit_particle_emitter.restart()
 	$Sprite.visible = false
 #	hit_particle_emitter.emitting = true
 	ready_to_destroy_bullet = true
@@ -80,7 +91,7 @@ func enemy_hit(body):
 #	print("srfjlesakfja;skidjf;oeijs;lkef;olsijef;lkse;sk")
 #	print("bullet " + str(body.get_instance_id()) + " damage: " + str(bullet.damage)) # For checking what was hit
 	if bullet:
-		body.emit_signal("get_hit", bullet.damage, bullet.pierce)
+		body.emit_signal("get_hit", self)
 
 func _on_HitDetector_body_entered(body: Node) -> void:
 	#	print(body.get_instance_id())

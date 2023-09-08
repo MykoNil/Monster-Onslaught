@@ -4,6 +4,9 @@ extends KinematicBody2D
 
 signal get_hit
 
+# Ammo pickup scene
+var ammo_pickup_scene = preload("res://Game_Objects/AmmoPickup.tscn")
+
 var barricade_group_name = "barricade"
 
 # Values
@@ -11,10 +14,23 @@ export var walk_speed = 200#150
 export var hit_points = 30# setget hit_points_set, hit_points_get
 var max_hp = hit_points
 
-export var attack_damage = 1
-var attack_pierce = 0
+export var damage = 1#attack_damage = 1
+var pierce = 0#attack_pierce = 0
 var attack_range = 70
 var attack_anim_speed = 1
+
+var can_move = true
+var knockback_enemy = false # For moving the enemy backward a moment
+var knockback_enemy_stay_still = false
+var bullet_knockback_strength = 100 # Pixels per second
+
+# These have the purpose of making it so the enemy can knockback hard and fast then stay still for a moment
+var knockback_counter = 0
+const KNOCKBACK_COOLDOWN = (0.125 / 2) * 60 # In frames
+const KNOCKBACK_STAY_STILL_COOLDOWN = 0.25 * 60 # In frames
+
+var bullet_shot_velocity
+
 
 # Other values intended for use with status effects, resistances, weaknesses, etc.
 var armor = 0
@@ -188,227 +204,254 @@ func _physics_process(delta: float) -> void:
 #		cast_ray_for_attack = false
 #		cast_ray_to_verify_attack(space_state, target.global_position)
 	
-	if cast_ray_for_attack:
-		cast_ray_for_attack = false
-		cast_ray_to_verify_attack(space_state, target.global_position)
-#		var distance_from_target = (target.global_position - global_position).length()
-#		print(self)
-#		print(target)
-##		print(distance_from_target)
-#		if distance_from_target > attack_range: # Player is now out of range
-#			attacking = false # Cancel attacking
-#		else:
-#			which_side = rng.randi_range(0, 1)
-#			which_anim = ""
-#
-#			change_attack_anim = true
+	# Pushes the enemy back when shot
+	if knockback_enemy:
+		knockback_counter += 1
+		walk_velocity = bullet_shot_velocity.normalized() * bullet_knockback_strength
+#		rotation = (player_node.position - global_position).angle() + deg2rad(-90)
+		walk_velocity = move_and_slide(walk_velocity)# * delta
+		if knockback_counter >= KNOCKBACK_COOLDOWN: # 0.25/second
+			knockback_enemy = false
+			knockback_enemy_stay_still = true
+			knockback_counter = 0
 	
-#	print(global_position)
-#	if target:
-##		if search_for_target:
-##			cast_ray_to_target(space_state, target.global_position)
-#
-#		if moving_type == traversal_state_name:
-#			point_to_move_to = navigation2d_agent.get_next_location()
-##			point_to_move_to = navigation2d_agent.get_nav_path()
-#			print(point_to_move_to)
-	############################################################
+	# Forces enemy to stop moving for a moment after being knocked back
+	if knockback_enemy_stay_still:
+		knockback_counter += 1
+		walk_velocity = Vector2(0, 0)
+		move_and_slide(walk_velocity)
+		if knockback_counter >= KNOCKBACK_STAY_STILL_COOLDOWN:
+			can_move = true
+			knockback_enemy_stay_still = false
 	
-	# Target exists
-	if target:
-#		print("Why bro")
-#		if inside_arena == false:
-#			moving_type = pursuit_state_name
-#			change_target(chosen_barricade)
+	if can_move:
+		if cast_ray_for_attack:
+			cast_ray_for_attack = false
+			cast_ray_to_verify_attack(space_state, target.global_position)
+	#		var distance_from_target = (target.global_position - global_position).length()
+	#		print(self)
+	#		print(target)
+	##		print(distance_from_target)
+	#		if distance_from_target > attack_range: # Player is now out of range
+	#			attacking = false # Cancel attacking
+	#		else:
+	#			which_side = rng.randi_range(0, 1)
+	#			which_anim = ""
+	#
+	#			change_attack_anim = true
 		
-#		print("Barricade down: " + str(chosen_barricade.barricade_down))
-#		if chosen_barricade.barricade_down == true:
-#			bit_mask = 0b010101
-#		else:
-#			bit_mask = 0b110101
+	#	print(global_position)
+	#	if target:
+	##		if search_for_target:
+	##			cast_ray_to_target(space_state, target.global_position)
+	#
+	#		if moving_type == traversal_state_name:
+	#			point_to_move_to = navigation2d_agent.get_next_location()
+	##			point_to_move_to = navigation2d_agent.get_nav_path()
+	#			print(point_to_move_to)
+		############################################################
+		
+		# Target exists
+		if target:
+	#		print("Why bro")
+	#		if inside_arena == false:
+	#			moving_type = pursuit_state_name
+	#			change_target(chosen_barricade)
 			
-		
-#		if target.is_in_group(barricade_group_name):
-#			if target.barricade_down == true and inside_arena == true: # Barricade down
-#				change_target(player_node)
-		
-#		elif target == player_node:
-#			pass
-#			if chosen_barricade.barricade_down == false and inside_arena == false: # Barricade up
-##				print("Up")
-#				change_target(chosen_barricade)
-#		if target.is_in_group(barricade_group_name):
-#			# Check if the barricade is down
-#			if target.barricade_down and target != player_node:
-#				change_target(player_node)
-#			else:
-#				pass
-#				# Determine if the enemy is able to reach the player. Otherwise, attack the barricade
-#				#
-##				change_target(choose_barricade_to_target())
-#		else:
-#			change_target(choose_barricade_to_target())
-		
-#		var direction_to_target = (target.position - global_position)
-#		var distance_from_target = direction_to_target.length()
-		
-#		if run_away:
-#			direction_to_target = run_from_player(direction_to_target)
-		
-		var point_from_enemy_to_player = (player_node.position - global_position)
-		var distance_from_player = point_from_enemy_to_player.length()
-		
-		var direction_to_barricade = (chosen_barricade.position - global_position)
-		var distance_from_barricade = direction_to_barricade.length()
-		
-		# Need to make sure the enemy doesn't go to another barricade, so only target player when in attacking range
-		# or when inside the arena
-		if inside_arena == false: # Not inside arena
-#			if chosen_barricade.barricade_down == false: # Barricade is not down
-#				change_target(chosen_barricade)
-#			else: # Barricade is down
-##				change_target(player_node)
-#				pass
-			if distance_from_barricade <= attack_range: # If enemy comes within distance of attacking the barricade
-				if chosen_barricade.barricade_down: # If barricade is down
-					change_target(player_node)
+	#		print("Barricade down: " + str(chosen_barricade.barricade_down))
+	#		if chosen_barricade.barricade_down == true:
+	#			bit_mask = 0b010101
+	#		else:
+	#			bit_mask = 0b110101
+				
 			
-			if chosen_barricade.barricade_down == false:
-				change_target(chosen_barricade)
-		elif inside_arena == true:
-			change_target(player_node)
+	#		if target.is_in_group(barricade_group_name):
+	#			if target.barricade_down == true and inside_arena == true: # Barricade down
+	#				change_target(player_node)
 			
-		
-		var direction_to_target = (target.position - global_position)
-		var distance_from_target = direction_to_target.length()
-		
-		# Changes enemy state based on distance from target
-		if distance_from_target <= attack_range:
-			if inside_arena == false:
-				if chosen_barricade.barricade_down == true:
-					pass
-#					change_target(player_node)
-#					state = states[1] # Move
-						
-				elif chosen_barricade.barricade_down == false:
+	#		elif target == player_node:
+	#			pass
+	#			if chosen_barricade.barricade_down == false and inside_arena == false: # Barricade up
+	##				print("Up")
+	#				change_target(chosen_barricade)
+	#		if target.is_in_group(barricade_group_name):
+	#			# Check if the barricade is down
+	#			if target.barricade_down and target != player_node:
+	#				change_target(player_node)
+	#			else:
+	#				pass
+	#				# Determine if the enemy is able to reach the player. Otherwise, attack the barricade
+	#				#
+	##				change_target(choose_barricade_to_target())
+	#		else:
+	#			change_target(choose_barricade_to_target())
+			
+	#		var direction_to_target = (target.position - global_position)
+	#		var distance_from_target = direction_to_target.length()
+			
+	#		if run_away:
+	#			direction_to_target = run_from_player(direction_to_target)
+			
+			var point_from_enemy_to_player = (player_node.position - global_position)
+			var distance_from_player = point_from_enemy_to_player.length()
+			
+			var direction_to_barricade = (chosen_barricade.global_position - global_position)
+			var distance_from_barricade = direction_to_barricade.length()
+			
+			# Need to make sure the enemy doesn't go to another barricade, so only target player when in attacking range
+			# or when inside the arena
+			if inside_arena == false: # Not inside arena
+	#			if chosen_barricade.barricade_down == false: # Barricade is not down
+	#				change_target(chosen_barricade)
+	#			else: # Barricade is down
+	##				change_target(player_node)
+	#				pass
+				if distance_from_barricade <= attack_range: # If enemy comes within distance of attacking the barricade
+					if chosen_barricade.barricade_down: # If barricade is down
+						change_target(player_node)
+				
+				if chosen_barricade.barricade_down == false:
 					change_target(chosen_barricade)
+			elif inside_arena == true:
+				change_target(player_node)
+				
+			
+			var direction_to_target = (target.position - global_position)
+			var distance_from_target = direction_to_target.length()
+			
+			# Changes enemy state based on distance from target
+			if distance_from_target <= attack_range:
+				if inside_arena == false:
+					if chosen_barricade.barricade_down == true:
+						pass
+	#					change_target(player_node)
+	#					state = states[1] # Move
+							
+					elif chosen_barricade.barricade_down == false:
+						change_target(chosen_barricade)
+						state = states[2] # Attack
+							
+				else:
+					attacking = true
 					state = states[2] # Attack
-						
-			else:
-				attacking = true
-				state = states[2] # Attack
+					
+	#			state = states[2] # Attack
+	#			if chosen_barricade.barricade_down and inside_arena == false:
+	#				state = states[1]
+	#				change_target(player_node)
+			else: # Out of attack range
+	#			print("Attempting to move")
+				var current_anim_name = animation_player.current_animation # Prevent the enemy from 
+				if current_anim_name == "Walk" or current_anim_name == "":
+					attacking = false
+				if not attacking:
+	#				print("State changed to move")
+					state = states[1] # Move
 				
-#			state = states[2] # Attack
-#			if chosen_barricade.barricade_down and inside_arena == false:
-#				state = states[1]
-#				change_target(player_node)
-		else:
-#			print("Attempting to move")
-			var current_anim_name = animation_player.current_animation # Prevent the enemy from 
-			if current_anim_name == "Walk" or current_anim_name == "":
-				attacking = false
-			if not attacking:
-#				print("State changed to move")
-				state = states[1] # Move
+			if search_for_target:
+				cast_ray_to_target(space_state, target.global_position)
 			
-		if search_for_target:
-			cast_ray_to_target(space_state, target.global_position)
-		
-		# For changing animations based on current state
-		if state == states[1]: # Moving
-#			if not melee_attacker:
-			if not animation_player.get_current_animation() == "Walk":
-				change_attack_anim = true
-#				if animation_player.get_current_animation_position() < animation_player.get_current_animation().length(): # If animation had not reached the end
-#					animation_interrupted = true
-				change_anim("Walk", 1)
-#			else:
-#				if animation_player.get_current_animation_position() >= animation_player.get_current_animation().length():
-#					if not animation_player.get_current_animation() == "Walk":
-#						change_anim("Walk", 1)
-		
-			var normalized_dir = Vector2.ZERO
+			# For changing animations based on current state
+			if state == states[1]: # Moving
+	#			if not melee_attacker:
+				if not animation_player.get_current_animation() == "Walk":
+					change_attack_anim = true
+	#				if animation_player.get_current_animation_position() < animation_player.get_current_animation().length(): # If animation had not reached the end
+	#					animation_interrupted = true
+					change_anim("Walk", 1)
+	#			else:
+	#				if animation_player.get_current_animation_position() >= animation_player.get_current_animation().length():
+	#					if not animation_player.get_current_animation() == "Walk":
+	#						change_anim("Walk", 1)
 			
-			# Change state between pursuing and traversing
-			if moving_type == pursuit_state_name: # Pursuit (Walk straight to the target)
-				initialize_target_location_debounce = false
-				normalized_dir = direction_to_target.normalized()
-			elif moving_type == traversal_state_name: # Traversal (Walk through the path to the target)
-				# start pathfinding. First, find the path between the points
-				if not initialize_target_location_debounce:
-					initialize_target_location_debounce = true
-#					navigation2d_agent.set_navigation(get_node(".."))
-#					var nav_map = navigation2d_agent.get_navigation_map()
-#					print(nav_map.get_id())
-					set_target_location(target.global_position)
-					$ChangePathTimer.start(path_change_time)
+				var normalized_dir = Vector2.ZERO
 				
-#				if frames_counter >= 30:
-#					frames_counter = 0
-#					set_target_location(target.global_position)
-#				else:
-#					frames_counter += 1
-				
-				point_to_move_to = navigation2d_agent.get_next_location()
-#				var path_exists = point_to_move_to
-#				if not point_to_move_to:
-#					change_target(choose_barricade_to_target())
-				
-				points_in_line[0] = Vector2(0, 0)#global_position
-#				points_in_line[1] = to_local(point_to_move_to)
-				line2D.points = points_in_line#.set_points(points_in_line)
-				
-				var points_for_line = navigation2d_agent.get_nav_path()
-				for i in range(points_for_line.size()):
-#					print("index: " + str(i))
-					var old_vector2 = points_for_line[i]
-					points_for_line.set(i, to_local(points_for_line[i]))
+				# Change state between pursuing and traversing
+				if moving_type == pursuit_state_name: # Pursuit (Walk straight to the target)
+					initialize_target_location_debounce = false
+					normalized_dir = direction_to_target.normalized()
+				elif moving_type == traversal_state_name: # Traversal (Walk through the path to the target)
+					# start pathfinding. First, find the path between the points
+					if not initialize_target_location_debounce:
+						initialize_target_location_debounce = true
+	#					navigation2d_agent.set_navigation(get_node(".."))
+	#					var nav_map = navigation2d_agent.get_navigation_map()
+	#					print(nav_map.get_id())
+						set_target_location(target.global_position)
+						$ChangePathTimer.start(path_change_time)
+					
+	#				if frames_counter >= 30:
+	#					frames_counter = 0
+	#					set_target_location(target.global_position)
+	#				else:
+	#					frames_counter += 1
+					
+					point_to_move_to = navigation2d_agent.get_next_location()
+	#				var path_exists = point_to_move_to
+	#				if not point_to_move_to:
+	#					change_target(choose_barricade_to_target())
+					
+					points_in_line[0] = Vector2(0, 0)#global_position
+	#				points_in_line[1] = to_local(point_to_move_to)
+					line2D.points = points_in_line#.set_points(points_in_line)
+					
+					var points_for_line = navigation2d_agent.get_nav_path()
+					for i in range(points_for_line.size()):
+	#					print("index: " + str(i))
+						var old_vector2 = points_for_line[i]
+						points_for_line.set(i, to_local(points_for_line[i]))
 
-#					points_for_line. = to_local(points_for_line[i])
-				points_for_line.push_back(to_local(navigation2d_agent.get_final_location()))
-#				line2D_2.points = points_for_line
-#				print(navigation2d_agent.get_nav_path())
-				
-				if navigation2d_agent.is_navigation_finished():
-					set_target_location(target.global_position)
-				
-				normalized_dir = (point_to_move_to - global_position).normalized()
-			
-#			print(point_to_move_to)
-			walk_velocity = normalized_dir * walk_speed
-#			navigation2d_agent.set_velocity(walk_velocity)
-			
-			
-			rotation = walk_velocity.angle() + deg2rad(-90)
-			walk_velocity = move_and_slide(walk_velocity.clamped(walk_speed))# * delta
-#			position += walk_velocity
-#			print(walk_velocity)
-#			print("Why--------------------------------------moving")
-		elif state == states[2]: # Attacking
-			if melee_attacker:
-				if change_attack_anim:
-	#				attacking = true
+	#					points_for_line. = to_local(points_for_line[i])
+					points_for_line.push_back(to_local(navigation2d_agent.get_final_location()))
+	#				line2D_2.points = points_for_line
+	#				print(navigation2d_agent.get_nav_path())
 					
-					which_side = rng.randi_range(0, 1)
-					which_anim = ""
-				
-					if which_side == 0:
-						which_anim = "Attack_left"
-					elif which_side == 1:
-						which_anim = "Attack_right"
+					if navigation2d_agent.is_navigation_finished():
+						set_target_location(target.global_position)
 					
-					change_anim(which_anim, rng.randf_range(1.25, 1.5))
-					change_attack_anim = false
-#			else:
-#				if can_attack:
-#					change_anim("Attack", 1.5)
-#			print("Attacking ---------------------------------")
-			# This allows the enemy to stop moving, but still detect collision (On its end, KinematicBody2D methods)
-			# *** Might not need this ***
-			walk_velocity = Vector2.ZERO
-			walk_velocity = move_and_slide(walk_velocity)
-			
-			rotation = direction_to_target.angle() + deg2rad(-90)
+					normalized_dir = (point_to_move_to - global_position).normalized()
+				
+	#			print(point_to_move_to)
+				walk_velocity += normalized_dir * walk_speed
+	#			navigation2d_agent.set_velocity(walk_velocity)
+				
+				
+				rotation = walk_velocity.angle() + deg2rad(-90)
+				
+#				if knockback_enemy:
+##					print(bullet_shot_velocity)
+#					walk_velocity = bullet_shot_velocity.normalized() * knockback_strength
+#					print(walk_velocity)
+				
+				walk_velocity = move_and_slide(walk_velocity.clamped(walk_speed))# * delta
+	#			position += walk_velocity
+	#			print(walk_velocity)
+	#			print("Why--------------------------------------moving")
+			elif state == states[2]: # Attacking
+				if melee_attacker:
+					if change_attack_anim:
+		#				attacking = true
+						
+						which_side = rng.randi_range(0, 1)
+						which_anim = ""
+					
+						if which_side == 0:
+							which_anim = "Attack_left"
+						elif which_side == 1:
+							which_anim = "Attack_right"
+						
+						change_anim(which_anim, rng.randf_range(1.25, 1.5))
+						change_attack_anim = false
+	#			else:
+	#				if can_attack:
+	#					change_anim("Attack", 1.5)
+	#			print("Attacking ---------------------------------")
+				# This allows the enemy to stop moving, but still detect collision (On its end, KinematicBody2D methods)
+				# *** Might not need this ***
+				walk_velocity = Vector2.ZERO
+				walk_velocity = move_and_slide(walk_velocity)
+				
+				rotation = direction_to_target.angle() + deg2rad(-90)
 		
 		
 		
@@ -450,6 +493,13 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 			which_anim = ""
 
 			change_attack_anim = true
+	if anim_name == "flinch":
+		pass
+		# Make sure to allow the enemy to do everything again
+#		knockback_enemy = false
+#		# Reset the enemy's velocity so it doesn't reach (0, 0), to prevent it from jittering after flinch
+#		walk_velocity = (player_node.position - global_position).normalized()
+#		can_move = true
 
 
 
@@ -583,20 +633,20 @@ func attack_target():
 	# Cast a ray to the target. If missed, return and continue as normal. If hit, emit signal to player of hit & damage
 
 	if target: # Currently no raycasting involved
-		target.emit_signal("get_hit", attack_damage, attack_pierce)
+		target.emit_signal("get_hit", self)#attack_damage, attack_pierce)
 
 
 # Deal with the enemy being hit
-func has_been_hit(damage, pierce):
-	print(pierce)
-	var new_armor = armor - pierce
-	var new_damage = (damage - (armor - (pierce * sign(armor))))
+func has_been_hit(bullet):
+	print(bullet.pierce)
+	var new_armor = armor - bullet.pierce
+	var new_damage = (bullet.damage - (armor - (bullet.pierce * sign(armor))))
 	
-	if new_damage > damage: # Prevent damage becoming more than the original damage
-		new_damage = damage
+	if new_damage > bullet.damage: # Prevent damage becoming more than the original damage
+		new_damage = bullet.damage
 	if new_damage < 0: # Prevent attacks from healing enemies (because enemy_hp = enemy_hp - damage, if damage < 0, e.g., dmg = 1; dmg = dmg - (-1).)
 		new_damage = 0
-	print("damage: " + str(damage))
+	print("damage: " + str(bullet.damage))
 	print("new damage: " + str(new_damage))
 	print("Enemy hp BEFORE damage: " + str(hit_points))
 	self.hit_points -= new_damage
@@ -609,15 +659,26 @@ func has_been_hit(damage, pierce):
 #		if enemy_spawner.spawn_on_enemy_death:
 #			enemy_spawner.spawn_enemy()
 	
+	animation_player.stop()
+	animation_player.play("flinch")
+	
+	can_move = false
+	
+	# For knocking back enemies
+	knockback_enemy = true
+	knockback_counter = 0
+	bullet_knockback_strength = bullet.knockback_strength
+	
 #	print((30.0 / 100.0) * max_hp)
 	if self.hit_points <= (30.0 / 100.0) * max_hp:
 		run_away = true
 
 
 # Enemy hit by player
-func _on_Enemy_get_hit(damage, pierce) -> void:
+func _on_Enemy_get_hit(bullet) -> void:
 #	print("Hit with damage: " + str(damage))
-	has_been_hit(damage, pierce)
+	bullet_shot_velocity = bullet.velocity
+	has_been_hit(bullet)
 
 
 # Enemy death
@@ -637,6 +698,13 @@ func on_enemy_death():
 		if not dead:
 			dead = true
 			player_node.emit_signal("earn_cash", cash_value)
+	
+	var dice_roll_number = rng.randi_range(1, 6)
+	if dice_roll_number == 3 or dice_roll_number == 5 or dice_roll_number == 1:# or dice_roll_number == 4:
+		# Spawn an ammo pickup
+		var ammo_pickup_instance = ammo_pickup_scene.instance()
+		ammo_pickup_instance.global_position = global_position
+		get_node("..").add_child(ammo_pickup_instance)
 	
 
 

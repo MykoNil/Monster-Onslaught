@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Game_Objects/Menus/ShopMenu.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://Game_Objects/Menus/ShopMenu.gd" type="Script" id=5]
 [ext_resource path="res://Game_Objects/Menus/ShopMenu_Tabs_Theme.tres" type="Theme" id=6]
 [ext_resource path="res://Assets/Custom Fonts/Custom_Font.tres" type="DynamicFont" id=7]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick_Area.png" type="Texture" id=8]
+[ext_resource path="res://Game_Objects/HUD/Generic_HUD_Text_Theme.tres" type="Theme" id=9]
+[ext_resource path="res://Assets/TouchScreen/Pause.png" type="Texture" id=10]
 
 [sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0.572549, 0.427451, 0.239216, 1 )
@@ -444,7 +447,8 @@ custom_fonts/font = ExtResource( 1 )
 text = "--"
 autowrap = true
 
-[node name="PauseGuideLabel" type="Label" parent="."]
+[node name="PauseGuideLabel3" type="Label" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -466,5 +470,44 @@ text = "Cash: 0"
 valign = 1
 uppercase = true
 
+[node name="ResumeGameButton" type="Button" parent="."]
+pause_mode = 2
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -96.0
+margin_right = 44.0
+margin_bottom = 134.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 0, 34 )
+icon = ExtResource( 8 )
+flat = true
+
+[node name="PauseGuideLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 48.0
+margin_top = -53.0
+margin_right = 331.0
+margin_bottom = -39.0
+grow_horizontal = 2
+theme = ExtResource( 9 )
+text = "Press           to resume game"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="PauseGuideLabel"]
+position = Vector2( 92, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+
+[node name="Sprite3" type="Sprite" parent="PauseGuideLabel/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 10 )
+
 [connection signal="player_cash_changed" from="." to="." method="_on_ShopMenu_player_cash_changed"]
 [connection signal="pressed" from="ColorRect/ItemInfoControl/PurchaseButton" to="." method="_on_PurchaseButton_pressed"]
+[connection signal="pressed" from="ResumeGameButton" to="." method="_on_ResumeGameButton_pressed"]

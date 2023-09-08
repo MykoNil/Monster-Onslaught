@@ -10,15 +10,26 @@ var scene_tree
 var guns_in_game
 
 var guns_side_view_images = {
+	# Tier 1
 	"Pistol": preload("res://Assets/Guns/SideView/Pistol.png"),
 	"Uzi": preload("res://Assets/Guns/SideView/Uzi-Simple.png"),
 	"Shotgun": preload("res://Assets/Guns/SideView/Shotgun.png"),
+	
+	# Tier 2
+	"SomeRapidFireGunForRenaming": preload("res://Assets/Guns/SideView/Uzi-Simple.png"),
+	"SomeSniperGun": preload("res://Game_Objects/Guns/SomeSniperGun.tscn"),
+	
 }
 
 var gun_scenes = [
+	# Tier 1
 	preload("res://Game_Objects/Guns/Pistol.tscn"), # Pistol
 	preload("res://Game_Objects/Guns/Uzi.tscn"), # Uzi
 	preload("res://Game_Objects/Guns/Shotgun.tscn"), # Shotgun
+	
+	# Tier 2
+	preload("res://Game_Objects/Guns/SomeRapidFireGunForRenaming.tscn"), # Rapid-firing gun
+	preload("res://Game_Objects/Guns/SomeSniperGun.tscn"), # Sniper-type gun
 ]
 
 var barricade_upgrades_owned = [
@@ -74,13 +85,14 @@ var weapon_equipped
 
 #var purchase_button
 
-
+var pause_menu_node
 
 #var guns_group_name = "guns"
 
 
 func _ready():
 #	print("Test: " + str(gun_scenes[0].bullet_type))
+	pause_menu_node = get_node("..")
 	scene_tree = get_tree()
 	
 	shop_items_control_node = get_node("ColorRect/ShopItems")
@@ -279,19 +291,22 @@ func shop_item_button_clicked(button, item, item_texture):
 			else:
 				purchase_button.text = "Purchase"
 		else:
-			purchase_button.text = "Equipped"
+			if guns_handler.gun_equipped.get_filename() == gun.get_filename():
+				purchase_button.text = "Equipped"
+			else:
+				purchase_button.text = "Equip"
 	# For support items
 	elif item[0].is_in_group(barricades_group_name):
 		var barricade = item[0]
 #		print("Just clicked: " + str(item.name))
-		print("Testllllllllll")
+#		print("Testllllllllll")
 		print(barricade.barricade_upgrades[item[1]])
 		
 		var barricade_upgrade_dictionary = barricade.barricade_upgrades[item[1]]
 		
 		damage_per_shot_label.text = ""
 		shots_per_second_label.text = ""
-		damage_per_second_label.modulate = Color("cd2222")
+		damage_per_second_label.modulate = Color("e44444")
 		damage_per_second_label.text = "HP: " + str(barricade_upgrade_dictionary.hp)
 		
 		item_texture_rect.texture = barricade_upgrade_dictionary.image
@@ -323,68 +338,92 @@ func shop_item_button_clicked(button, item, item_texture):
 # SHOP ITEM PURCHASE -----------------------------------------------
 # Purchase/equip button clicked
 func _on_PurchaseButton_pressed() -> void:
-	if shop_item_selected[0].is_in_group(guns_group_name): # If the selected shop item is a gun
-		print("Item selected: " + str(shop_item_selected))
-		var selected_gun = shop_item_selected[0]
-		
-		# For guns
-		if not weapon_owned:
-			# Does player have enough cash to purchase?
-			if player_node.cash >= selected_gun.cost: # Player can purchase
-				print("Had enough cash. Purchased")
-				# Take away amount of cash and add item to player's owned array
-				player_node.cash -= selected_gun.cost
-				
-				# Duplicate the gun instance and add it to the gunshandler
-				var gun_selected_duplicate = selected_gun.duplicate()
-				gun_selected_duplicate.visible = true
-				guns_handler.weapons_owned.push_back(gun_selected_duplicate)
-				
-				# Successful purchase. Will now display "Equip"
-				purchase_button.text = "Equip"
-				weapon_owned = true
-		else:
-			print("Already owned. Not purchased")
-			# Will equip the gun now
+	if shop_item_selected:
+		if shop_item_selected[0].is_in_group(guns_group_name): # If the selected shop item is a gun
+			print("Item selected: " + str(shop_item_selected))
+			var selected_gun = shop_item_selected[0]
 			
-			# Check for if the player already has the owned weapon equipped
-			if not weapon_equipped:
-				# Duplicate the gun instance and add it to the gunshandler
-				var gun_selected_duplicate = selected_gun.duplicate()
-				gun_selected_duplicate.visible = true
-				guns_handler.weapons_equipped.push_back(gun_selected_duplicate)
-				purchase_button.text = "Equipped"
-				weapon_equipped = true
-#			else:
-#				purchase_button.text = "Equipped"
-			
-		
-	# For support items
-	elif shop_item_selected[0].is_in_group(barricades_group_name):
-		var barricade_upgrade_dictionary = shop_item_selected[1]
-		
-		# Does player have enough cash to purchase?
-		print("What is the index? --> " + str(barricade_upgrades_owned.find(barricade_upgrade_dictionary.name)))
-		if barricade_upgrades_owned.find(barricade_upgrade_dictionary.name) <= -1: # If upgrade is not owned
-			
-			# If the player has enough cash
-			if player_node.cash >= barricade_upgrade_dictionary.cost:#shop_item_selected.barricade_upgrades[item[1]].cost: # Player can purchase
-				print("Had enough cash. Purchased")
-				
-				# Take away amount of cash and add item to player's owned array
-				player_node.cash -= barricade_upgrade_dictionary.cost
-				
-				# Add upgrade to owned upgrades array
-				barricade_upgrades_owned.push_back(barricade_upgrade_dictionary.name)
-				
-				# Successful purchase. Will now display "Equip"
-				purchase_button.text = "Equip"
+			# For guns
+			if not weapon_owned:
+				# Does player have enough cash to purchase?
+				if player_node.cash >= selected_gun.cost: # Player can purchase
+					print("Had enough cash. Purchased")
+					# Take away amount of cash and add item to player's owned array
+					player_node.cash -= selected_gun.cost
+					
+					# Duplicate the gun instance and add it to the gunshandler
+					var gun_selected_duplicate = selected_gun.duplicate()
+					gun_selected_duplicate.visible = true
+					guns_handler.weapons_owned.push_back(gun_selected_duplicate)
+					
+					# Successful purchase. Will now display "Equip"
+					purchase_button.text = "Equip"
+					weapon_owned = true
 			else:
-				print("Not enough cash.")
-		else:
-			print("Owned. Not purchased. Equipped?")
-			change_barricades(barricade_upgrade_dictionary)
+				print("Already owned. Not purchased")
+				# Will equip the gun now
+				
+				
+				# Check for if the player already has the owned weapon equipped
+				if not weapon_equipped:
+					# Duplicate the gun instance and add it to the gunshandler
+					var gun_selected_duplicate = selected_gun.duplicate()
+					gun_selected_duplicate.visible = true
+					guns_handler.weapons_equipped.push_back(gun_selected_duplicate)
+					purchase_button.text = "Equipped"
+					weapon_equipped = true
+					
+					# The index where the new gun is, which easily could be the last element of the array
+	#				guns_handler.equipped_gun_index = guns_handler.weapons_equipped.size()-1
+					guns_handler.equip_weapon_from_index(guns_handler.weapons_equipped.size()-1)
+				
+				# Check if the currently selected weapon is the one the player is holding. Otherwise equip it.
+				else:
+					var index_of_gun
+					for gun in guns_handler.weapons_equipped:
+						if gun.get_filename() == selected_gun.get_filename():
+							index_of_gun = guns_handler.weapons_equipped.find(gun)
+	#				var index_of_gun# = guns_handler.weapons_equipped.find(selected_gun)
+					if index_of_gun != -1:
+						# Now you have the index where the gun is. Equip it.
+						if index_of_gun == guns_handler.equipped_gun_index: # Player already has it equipped
+							pass
+						else: # Player needs to equip it
+							guns_handler.equipped_gun_index = index_of_gun
+							guns_handler.equip_gun()
+							
+						
+							purchase_button.text = "Equipped"
+	#			else:
+	#				purchase_button.text = "Equipped"
+				
 			
+		# For support items
+		elif shop_item_selected[0].is_in_group(barricades_group_name):
+			var barricade_upgrade_dictionary = shop_item_selected[1]
+			
+			# Does player have enough cash to purchase?
+			print("What is the index? --> " + str(barricade_upgrades_owned.find(barricade_upgrade_dictionary.name)))
+			if barricade_upgrades_owned.find(barricade_upgrade_dictionary.name) <= -1: # If upgrade is not owned
+				
+				# If the player has enough cash
+				if player_node.cash >= barricade_upgrade_dictionary.cost:#shop_item_selected.barricade_upgrades[item[1]].cost: # Player can purchase
+					print("Had enough cash. Purchased")
+					
+					# Take away amount of cash and add item to player's owned array
+					player_node.cash -= barricade_upgrade_dictionary.cost
+					
+					# Add upgrade to owned upgrades array
+					barricade_upgrades_owned.push_back(barricade_upgrade_dictionary.name)
+					
+					# Successful purchase. Will now display "Equip"
+					purchase_button.text = "Equip"
+				else:
+					print("Not enough cash.")
+			else:
+				print("Owned. Not purchased. Equipped?")
+				change_barricades(barricade_upgrade_dictionary)
+				
 
 
 
@@ -404,3 +443,7 @@ func _on_ShopMenu_player_cash_changed(cash) -> void:
 	# Just need to update the cash label with the player's current cash value
 	cash_label.text = "Cash: $" + str(cash)
 	
+
+# This is for unpausing the game at the shop menu
+func _on_ResumeGameButton_pressed() -> void:
+	pause_menu_node.set_is_paused(false)

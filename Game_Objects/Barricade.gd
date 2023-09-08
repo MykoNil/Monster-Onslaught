@@ -13,8 +13,8 @@ var enemies_group_name = "enemies"
 # For the variations of the barricade, such as upgrades
 var barricade_upgrades = [
 	{"name" : "Wood Barricade", "hp" : max_hp, "cost" : 0, "image" : preload("res://Assets/Environment/Barricades/Barricade_01.png")}, # First upgrade
-	{"name" : "Solid Wood Barricade", "hp" : 55, "cost" : 20, "image" : preload("res://Assets/Environment/Barricades/Barricade_02.png")}, # First upgrade
-	{"name" : "Defensive Barricade", "hp" : 100, "cost" : 45, "image" : preload("res://Assets/Environment/Barricades/Barricade_03.png")} # Second upgrade
+	{"name" : "Solid Wood Barricade", "hp" : 75, "cost" : 100, "image" : preload("res://Assets/Environment/Barricades/Barricade_02.png")}, # First upgrade
+	{"name" : "Defensive Barricade", "hp" : 150, "cost" : 335, "image" : preload("res://Assets/Environment/Barricades/Barricade_03.png")} # Second upgrade
 ]
 
 func _ready() -> void:
@@ -68,9 +68,9 @@ func _on_InsideAreaTrigger_body_entered(body: Node) -> void:
 #	self.hit_points -= damage
 
 
-func _on_Barricade_get_hit(damage, pierce) -> void:
+func _on_Barricade_get_hit(enemy) -> void:
 	# Remove hit_points from the barricade, based on how much damage was dealt
-	self.hit_points -= damage
+	self.hit_points -= enemy.damage
 	print("Barricade hp: " + str(hit_points))
 #	if hit_points <= 0:
 #		on_death()

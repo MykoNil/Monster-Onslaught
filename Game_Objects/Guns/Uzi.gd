@@ -12,7 +12,11 @@ func _ready():
 	
 	damage = bullet_info.damage_per_shot
 	shots_per_second = bullet_info.shots_per_second
-	cost = 15
+	cost = 132
+	
+	# Bullet overrides
+	bullet_damage = 1
+	bullet_knockback_strength = 3 * 60 # x pixels per frame (converted into pixels per second)
 	
 	gun_name = "Uzi"
 	shop_description = "This miniature devestator has the power to fire " + str(shots_per_second) + " times per second!"
@@ -20,7 +24,7 @@ func _ready():
 	# Gun clips/ammo
 	clip_max_size = 160
 	clip_size = clip_max_size
-	ammo = clip_max_size * 5#1760
+	ammo = clip_max_size * 8#1760
 	
 	
 	# Bullets are fired at a fast rate

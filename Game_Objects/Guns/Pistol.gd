@@ -12,10 +12,15 @@ func _ready():
 	shots_per_second = bullet_info.shots_per_second
 	cost = 0
 	
+	# Bullet overrides
+	bullet_damage = 2
+	bullet_knockback_strength = 5 * 60 # x pixels per frame (converted into pixels per second)
+#	bullet_hp = 3
+	
 	# Gun clips/ammo
 	clip_max_size = 24
 	clip_size = clip_max_size
-	ammo = clip_max_size * 6
+	ammo = clip_max_size * 5
 	
 #	bullet_with_info.queue_free()
 	

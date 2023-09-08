@@ -4,8 +4,8 @@ extends "res://Game_Objects/Enemies/Enemy_Parent_Scene.gd"
 
 
 func _ready():
-	hit_points = 20
-	attack_damage = 1
+	hit_points = 10
+	damage = 1
 	attack_range = 90
 	attack_anim_speed = 1
 	

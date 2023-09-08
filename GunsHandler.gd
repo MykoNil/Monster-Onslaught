@@ -36,7 +36,7 @@ func _ready():
 	gun_hold_position_node = player_node.get_node("GunHoldPosition")
 
 	arena_node = player_node.get_node("..")
-	HUD_node = scene_tree.get_root().get_node("Main/Arena1/HUD")
+	HUD_node = get_node("../../HUD")
 
 	# Give player pistol to start the game
 	give_player_gun_from_scene(pistol_scene)
@@ -49,7 +49,7 @@ func _ready():
 	weapons_owned.push_back(gun_equipped)
 #	var uzi_instance = uzi_scene.instance()
 #	weapons_owned.push_back(uzi_instance)
-	weapons_owned.push_back(shotgun_scene.instance())
+#	weapons_owned.push_back(shotgun_scene.instance())
 	
 	
 #	for i in range(0, 2):
@@ -102,8 +102,15 @@ func give_player_gun_from_instance(gun_instance):
 	gun_instance.position = gun_hold_position_node.position
 	player_node.gun = gun_instance
 	gun_equipped = gun_instance
+	gun_equipped.gun_trigger_held = false
 	HUD_node.emit_signal("gun_clip_ammo_changed", gun_instance.clip_size, gun_instance.ammo)
 	HUD_node.emit_signal("weapon_equipped", gun_instance)
+	
+	if gun_equipped.ammo <= 0:
+		if gun_equipped.clip_size > 0:
+			HUD_node.display_gun_reloading_label(false)
+		else:
+			HUD_node.display_gun_reloading_label("NoAmmo")
 
 func give_player_gun_from_scene(gun_scene):
 	var gun_instance = gun_scene.instance()
@@ -161,13 +168,14 @@ func switch_weapon(direction):
 		elif equipped_gun_index < 0:
 			equipped_gun_index = weapons_equipped.size()-1
 		
-		# Stop the gun's timer from working then switch gun
-		gun_equipped.need_to_reload = false
-		gun_equipped.get_node("ReloadTimer").stop()
-		
-		# Now switch the weapon from the player's hand and put other weapon in their hand
-		player_node.remove_child(gun_equipped)
-		give_player_gun_from_instance(weapons_equipped[equipped_gun_index])
+		equip_gun()
+#		# Stop the gun's timer from working then switch gun
+#		gun_equipped.need_to_reload = false
+#		gun_equipped.get_node("ReloadTimer").stop()
+#
+#		# Now switch the weapon from the player's hand and put other weapon in their hand
+#		player_node.remove_child(gun_equipped)
+#		give_player_gun_from_instance(weapons_equipped[equipped_gun_index])
 #		gun_equipped = weapons_owned[equipped_gun_index]
 	else:
 		equipped_gun_index = 0
@@ -175,8 +183,19 @@ func switch_weapon(direction):
 		
 #	print("Equipped gun index: " + str(equipped_gun_index))
 
+func equip_weapon_from_index(index):
+	equipped_gun_index = index
+	equip_gun()
 
-
-
-
+func equip_gun():
+	HUD_node.display_gun_reloading_label(false)
+	# Stop the gun's timer from working then switch gun
+	gun_equipped.need_to_reload = false
+	gun_equipped.gun_trigger_held = false
+	gun_equipped.reloading = false
+	gun_equipped.get_node("ReloadTimer").stop()
+	
+	# Now switch the weapon from the player's hand and put other weapon in their hand
+	player_node.remove_child(gun_equipped)
+	give_player_gun_from_instance(weapons_equipped[equipped_gun_index])
 

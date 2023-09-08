@@ -13,10 +13,15 @@ signal gun_clip_ammo_changed
 
 signal inform_player_of_wave_ending
 
-var guns_side_view_images = {
+var guns_side_view_images = { # Will have to move this into a script singleton (autoloaded script)
+	# Tier 1
 	"res://Game_Objects/Guns/Pistol.tscn": preload("res://Assets/Guns/SideView/Pistol.png"),
 	"res://Game_Objects/Guns/Uzi.tscn": preload("res://Assets/Guns/SideView/Uzi-Simple.png"),
 	"res://Game_Objects/Guns/Shotgun.tscn": preload("res://Assets/Guns/SideView/Shotgun.png"),
+	
+	# Tier 2
+	"res://Game_Objects/Guns/SomeRapidFireGunForRenaming.tscn": preload("res://Assets/Guns/SideView/Uzi-Simple.png"),
+	"res://Game_Objects/Guns/SomeSniperGun.tscn": preload("res://Assets/Guns/SideView/Uzi-Simple.png"),
 }
 
 
@@ -44,6 +49,9 @@ var wave_finished_animation_player
 var show_player_wave_ended_timer
 
 var action_indicator_label
+var reload_indicator_label
+var reload_indicator_anim_player
+
 
 
 # Get scenes
@@ -62,9 +70,11 @@ func _ready() -> void:
 	
 	# Gun & clip nodes
 	gun_shadow_texture_rect = player_HUD_control.get_node("GunShadowTextureRect")
-	gun_texture_rect = gun_shadow_texture_rect.get_node("GunTextureRect")
 	clip_label = gun_shadow_texture_rect.get_node("ClipLabel")
+	gun_texture_rect = gun_shadow_texture_rect.get_node("GunTextureRect")
 	
+	reload_indicator_label = gun_shadow_texture_rect.get_node("ReloadIndicatorLabel")
+	reload_indicator_anim_player = reload_indicator_label.get_node("AnimationPlayer")
 	
 	# Player cash
 	cash_label = player_HUD_control.get_node("CashLabel")
@@ -75,7 +85,6 @@ func _ready() -> void:
 	show_player_wave_ended_timer = wave_finished_label.get_node("ShowPlayerNextWaveTimer")
 	
 	action_indicator_label = player_HUD_control.get_node("ActionIndicatorLabel")
-	
 	
 	print("Ready from HUD")
 	
@@ -101,6 +110,26 @@ func _ready() -> void:
 #		update_hp_bar_label()
 #
 
+func display_gun_reloading_label(reloading):
+	# First make it visible
+	reload_indicator_label.text = "Reloading"
+	if reloading:
+		reload_indicator_label.visible = true
+		# Next, play color pulsing animation
+		
+		reload_indicator_anim_player.play("pulsing")
+		reload_indicator_anim_player.seek(0.0, true)
+	else:
+		reload_indicator_anim_player.stop()
+		reload_indicator_label.visible = false
+	
+	if typeof(reloading) == TYPE_STRING:
+		if reloading == "NoAmmo":
+			reload_indicator_anim_player.play("pulsing")
+			reload_indicator_anim_player.seek(0.0, true)
+			reload_indicator_label.text = "Out of ammo."
+		
+	
 
 # For testing the hp bar
 func animate_hp_bar(hit_points):

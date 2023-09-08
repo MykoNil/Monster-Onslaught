@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Game_Objects/HUD/Wave_Transition_Animation.tres" type="Animation" id=1]
 [ext_resource path="res://HUD.gd" type="Script" id=2]
@@ -8,6 +8,11 @@
 [ext_resource path="res://Assets/Guns/SideView/Shotgun.png" type="Texture" id=6]
 [ext_resource path="res://Game_Objects/HUD/HUD_StatusEffectTextureRect.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Game_Objects/HUD/Generic_HUD_Text_Theme.tres" type="Theme" id=8]
+[ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://Game_Objects/ReloadIndicatorLabelpulsing.tres" type="Animation" id=10]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick_Area.png" type="Texture" id=11]
+[ext_resource path="res://Assets/TouchScreen/Interact.png" type="Texture" id=12]
+[ext_resource path="res://Game_Objects/GameEndings.tscn" type="PackedScene" id=13]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.639216, 0, 0, 1 )
@@ -25,6 +30,19 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color( 0.176471, 0.0431373, 0.0431373, 1 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 8
+outline_size = 1
+outline_color = Color( 0.109804, 0.027451, 0.027451, 1 )
+extra_spacing_top = 1
+extra_spacing_bottom = 1
+extra_spacing_char = 1
+extra_spacing_space = 5
+font_data = ExtResource( 9 )
+
+[sub_resource type="Theme" id=4]
+default_font = SubResource( 3 )
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 2 )
 
@@ -38,9 +56,9 @@ __meta__ = {
 [node name="HealthProgressBar" type="ProgressBar" parent="HUDControl"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 16.0
+margin_left = 344.0
 margin_top = -32.0
-margin_right = 218.0
+margin_right = 546.0
 margin_bottom = -16.0
 theme = ExtResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -62,10 +80,12 @@ valign = 1
 [node name="CashLabel" type="Label" parent="HUDControl"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -96.0
+margin_left = -216.0
 margin_top = 16.0
-margin_right = -13.0
+margin_right = -133.0
 margin_bottom = 30.0
+grow_horizontal = 0
+rect_pivot_offset = Vector2( 64, 0 )
 theme = ExtResource( 8 )
 text = "Cash: 0"
 valign = 1
@@ -82,12 +102,22 @@ margin_right = 113.5
 margin_bottom = -114.0
 grow_horizontal = 2
 theme = ExtResource( 8 )
-text = "Press f to fix barricade"
+text = "Press          to fix barricade"
 align = 1
 valign = 1
 uppercase = true
 
+[node name="Sprite2" type="Sprite" parent="HUDControl/ActionIndicatorLabel"]
+position = Vector2( 87.5, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 11 )
+
+[node name="Sprite3" type="Sprite" parent="HUDControl/ActionIndicatorLabel/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 12 )
+
 [node name="PauseTipLabel" type="Label" parent="HUDControl"]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -133,14 +163,12 @@ anims/Wave_Transition_Animation = ExtResource( 1 )
 
 [node name="GunShadowTextureRect" type="TextureRect" parent="HUDControl"]
 self_modulate = Color( 0, 0, 0, 0.427451 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -256.0
-margin_top = 240.0
-margin_right = -224.0
-margin_bottom = 272.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 584.0
+margin_top = -37.0
+margin_right = 616.0
+margin_bottom = -5.0
 rect_scale = Vector2( 2, 2 )
 rect_pivot_offset = Vector2( 17.0667, 17.0666 )
 texture = ExtResource( 6 )
@@ -162,6 +190,26 @@ text = "80
 align = 1
 valign = 1
 uppercase = true
+
+[node name="ReloadIndicatorLabel" type="Label" parent="HUDControl/GunShadowTextureRect"]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = -3.46664
+margin_top = -31.4667
+margin_right = 140.533
+margin_bottom = 4.53329
+grow_horizontal = 2
+grow_vertical = 2
+rect_scale = Vector2( 0.5, 0.5 )
+theme = SubResource( 4 )
+text = "reloading"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HUDControl/GunShadowTextureRect/ReloadIndicatorLabel"]
+anims/pulsing = ExtResource( 10 )
 
 [node name="GunTextureRect" type="TextureRect" parent="HUDControl/GunShadowTextureRect"]
 anchor_left = 0.5
@@ -195,6 +243,8 @@ margin_bottom = 32.0
 
 [node name="PauseMenu" parent="." instance=ExtResource( 5 )]
 visible = false
+
+[node name="GameoverScreens" parent="." instance=ExtResource( 13 )]
 
 [connection signal="gun_clip_ammo_changed" from="." to="." method="_on_HUD_gun_clip_ammo_changed"]
 [connection signal="inform_player_of_wave_ending" from="." to="." method="_on_HUD_inform_player_of_wave_ending"]

@@ -22,6 +22,22 @@ func set_is_paused(new_value):
 	visible = is_paused
 	if not is_paused:
 		shop_menu_node.visible = false
+		$SettingsMenu.visible = false
+#	else:
+#		$ResumeButton.shape_visible = false
+	
+	# Make sure any and all guns don't have the trigger held
+	for gun in scene_tree.get_nodes_in_group("guns"):
+		gun.gun_trigger_held = false
+	
+	for thumbstick in scene_tree.get_nodes_in_group("thumbsticks"):
+		thumbstick.joystick_active = false
+		thumbstick.keep_joystick_focus = false
+		thumbstick.button_pressed = false
+		
+		if thumbstick.name == "LeftJoystick":
+			thumbstick.reset_thumbstick()
+	
 	
 func _unhandled_input(event):
 #	print("yee")
@@ -41,6 +57,7 @@ func _on_OpenShopButton_pressed() -> void:
 func change_the_scene(scene_path):
 	set_is_paused(false)
 	scene_tree.change_scene(scene_path)
+#	shop_menu_node.visible = true
 #	GunsHandler.initialize()
 
 
@@ -51,6 +68,40 @@ func change_the_scene(scene_path):
 #func _on_Button2_pressed() -> void:
 #	print("Other button")
 #	$Button2.visible = false
+
+
+
+
+
+func _on_ResumeGameButton_button_down() -> void:
+#	shop_menu_node.visible = true
+	set_is_paused(false)
+
+
+
+# ---------------------------------------------------------- Settings ----------------------------------------------------------
+# For displaying the settings menu
+func _on_OpenSettingsButton_pressed() -> void:
+	$SettingsMenu.visible = true
+
+
+func _on_CloseSettingsButton_pressed() -> void:
+	$SettingsMenu.visible = false
+	
+
+
+
+
+
+# Activate touchscreen controls
+func _on_Button2_pressed() -> void:
+	GameSettings.control_scheme = 1
+
+
+# Activate keyboard & mouse controls
+func _on_Button1_pressed() -> void:
+	GameSettings.control_scheme = 0
+
 
 
 

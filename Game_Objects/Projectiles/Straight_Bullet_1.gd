@@ -10,5 +10,7 @@ func _ready():
 
 func initialize():
 #	print("Craup")
+	knockback_strength = 30 * 60 # x pixels per frame (converted into pixels per second)
 	damage = 1
 	pierce = 4.5
+	bullet_life_time = 1.5

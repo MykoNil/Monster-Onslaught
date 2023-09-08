@@ -13,6 +13,8 @@
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 
+[node name="HUD" parent="." instance=ExtResource( 4 )]
+
 [node name="Arena1" parent="." instance=ExtResource( 7 )]
 
 [node name="Draw" type="Node2D" parent="Arena1"]
@@ -25,8 +27,6 @@ __meta__ = {
 position = Vector2( 2066, 1752 )
 
 [node name="MobSpawner" parent="Arena1" instance=ExtResource( 6 )]
-
-[node name="HUD" parent="Arena1" instance=ExtResource( 4 )]
 
 [node name="PlayerSession" type="Node" parent="Arena1"]
 script = ExtResource( 5 )
@@ -45,7 +45,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Mouse" parent="." instance=ExtResource( 8 )]
+[node name="Crosshair" parent="." instance=ExtResource( 8 )]
 
 [node name="Line2D" type="Line2D" parent="."]
 
@@ -53,3 +53,7 @@ __meta__ = {
 default_color = Color( 1, 0.423529, 0, 1 )
 
 [connection signal="draw_from_player_to_mouse" from="Arena1/Draw" to="Arena1/Draw" method="_on_Draw_draw_from_player_to_mouse"]
+[connection signal="player_died" from="Arena1/Player" to="Arena1/MobSpawner" method="_on_Player_player_died"]
+[connection signal="pause_game_on_ending" from="Arena1/MobSpawner" to="HUD/GameoverScreens" method="_on_MobSpawner_pause_game_on_ending"]
+
+[editable path="HUD"]

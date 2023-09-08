@@ -1,9 +1,26 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Game_Objects/Menus/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Custom Fonts/Narrator's Speech.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Game_Objects/Menus/Button.gd" type="Script" id=3]
 [ext_resource path="res://Game_Objects/Menus/ShopMenu.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Game_Objects/HUD/Generic_HUD_Text_Theme.tres" type="Theme" id=5]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick.png" type="Texture" id=6]
+[ext_resource path="res://Assets/TouchScreen/Thumbstick_Area.png" type="Texture" id=7]
+[ext_resource path="res://Assets/TouchScreen/Interact.png" type="Texture" id=8]
+[ext_resource path="res://Assets/TouchScreen/Crosshair.png" type="Texture" id=9]
+[ext_resource path="res://Game_Objects/Mobile/LeftJoystick.gd" type="Script" id=10]
+[ext_resource path="res://Assets/TouchScreen/Swap_Weapon.png" type="Texture" id=11]
+[ext_resource path="res://Assets/TouchScreen/Pause.png" type="Texture" id=12]
+[ext_resource path="res://Assets/TouchScreen/Reload_Button.png" type="Texture" id=13]
+[ext_resource path="res://Assets/Gui/Shooting/Crosshair001-Large2.png" type="Texture" id=14]
+[ext_resource path="res://Assets/Player/Holding_Gun-Player-Expanded.png" type="Texture" id=15]
+[ext_resource path="res://Assets/Bullets/Basic_1.png" type="Texture" id=16]
+[ext_resource path="res://Assets/Ammo/Ammo_pickup.png" type="Texture" id=17]
+[ext_resource path="res://Assets/Enemies/Tanky/Parts/Body.png" type="Texture" id=18]
+[ext_resource path="res://Assets/Enemies/Tanky/Parts/Head.png" type="Texture" id=19]
+[ext_resource path="res://Assets/Enemies/Tanky/Parts/RightArm.png" type="Texture" id=20]
+[ext_resource path="res://Assets/Enemies/Tanky/Parts/LeftArm.png" type="Texture" id=21]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
@@ -43,6 +60,41 @@ font_data = ExtResource( 2 )
 [sub_resource type="Theme" id=5]
 default_font = SubResource( 4 )
 
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 0.364706, 0.231373, 0.466667, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[sub_resource type="DynamicFont" id=13]
+outline_size = 1
+outline_color = Color( 0.0705882, 0.0901961, 0.360784, 1 )
+extra_spacing_bottom = 1
+extra_spacing_space = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=9]
+default_font = SubResource( 13 )
+Button/colors/font_color = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_disabled = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_focus = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_hover = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/colors/font_color_pressed = Color( 0.258824, 0.839216, 0.513726, 1 )
+Button/styles/hover = SubResource( 10 )
+Button/styles/normal = SubResource( 11 )
+Button/styles/pressed = SubResource( 12 )
+
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -53,7 +105,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.313726, 0.235294, 0.180392, 1 )
 
-[node name="Button" type="Button" parent="ColorRect"]
+[node name="PlayGameButton" type="Button" parent="ColorRect"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -85,19 +137,356 @@ text = "Monster Onslaught"
 align = 1
 valign = 1
 
+[node name="OpenTutorialButton" type="Button" parent="ColorRect"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 71.0
+margin_top = -124.0
+margin_right = 206.0
+margin_bottom = -57.0
+theme = SubResource( 9 )
+text = "Tutorial"
+icon_align = 1
+
+[node name="InteractTutorial3" type="Label" parent="ColorRect/OpenTutorialButton"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 181.5
+margin_top = -140.0
+margin_right = 562.5
+margin_bottom = -117.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Please read the
+tutorial before playing"
+align = 1
+valign = 1
+uppercase = true
+
 [node name="Label2" type="Label" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -76.0
+margin_left = -192.0
 margin_top = -42.0
-margin_right = -18.0
+margin_right = -9.0
 theme = SubResource( 5 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 4 )
-text = "V 0.3.1"
+text = "V 0.3.2"
 align = 2
 valign = 1
 
-[connection signal="pressed" from="ColorRect/Button" to="ColorRect/Button" method="_on_Button_pressed"]
+[node name="TutorialImage" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -208, 112 )
+color = Color( 0.505882, 0.647059, 0.427451, 1 )
+
+[node name="PlayerDemoSprite" type="Sprite" parent="TutorialImage"]
+position = Vector2( 608, 207 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 15 )
+
+[node name="Crosshair" type="Sprite" parent="TutorialImage"]
+position = Vector2( 592, 303 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 14 )
+
+[node name="CloseTutorialButton" type="Button" parent="TutorialImage"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 864.0
+margin_top = -61.0
+margin_right = 999.0
+margin_bottom = -18.0
+theme = SubResource( 9 )
+text = "Close"
+icon_align = 1
+
+[node name="InteractTutorial" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -448.0
+margin_top = -141.0
+margin_right = -69.0
+margin_bottom = -127.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Press          near a barricade to fix it"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/InteractTutorial"]
+position = Vector2( 87.5, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/InteractTutorial/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 8 )
+
+[node name="InteractTutorial2" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -480.0
+margin_top = -317.0
+margin_right = -101.0
+margin_bottom = -303.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Press          to reload your gun"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/InteractTutorial2"]
+position = Vector2( 120, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/InteractTutorial2/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 13 )
+
+[node name="ShootTutorial" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -528.0
+margin_top = -405.0
+margin_right = -149.0
+margin_bottom = -391.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Press           to shoot"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/ShootTutorial"]
+position = Vector2( 168, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/ShootTutorial/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 9 )
+
+[node name="ShootTutorial2" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -472.0
+margin_top = -229.0
+margin_right = -93.0
+margin_bottom = -215.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Press           to switch your guns"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/ShootTutorial2"]
+position = Vector2( 112, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/ShootTutorial2/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 11 )
+
+[node name="ShootTutorial3" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -488.0
+margin_top = -53.0
+margin_right = -109.0
+margin_bottom = -39.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Press           to pause the game"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/ShootTutorial3"]
+position = Vector2( 128, 6 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/ShootTutorial3/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 12 )
+
+[node name="ShootTutorial4" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 112.0
+margin_top = -373.0
+margin_right = 491.0
+margin_bottom = -324.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Pickup          to
+
+
+replenish your ammo."
+align = 2
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/ShootTutorial4"]
+position = Vector2( 320, 0 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite3" type="Sprite" parent="TutorialImage/ShootTutorial4/Sprite2"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 17 )
+
+[node name="ShootTutorial5" type="Label" parent="TutorialImage"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 112.0
+margin_top = -269.0
+margin_right = 491.0
+margin_bottom = -207.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Shoot           bullets
+
+
+to inflict damage to
+armored enemies."
+align = 2
+valign = 1
+uppercase = true
+
+[node name="Sprite2" type="Sprite" parent="TutorialImage/ShootTutorial5"]
+position = Vector2( 264, 0 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+
+[node name="Sprite" type="Sprite" parent="TutorialImage/ShootTutorial5/Sprite2"]
+modulate = Color( 0.960784, 0.145098, 0.0392157, 1 )
+scale = Vector2( 4, 6 )
+texture = ExtResource( 16 )
+
+[node name="LeftJoystick" type="TouchScreenButton" parent="TutorialImage" groups=["thumbsticks"]]
+self_modulate = Color( 0.258824, 0.678431, 0.72549, 0.501961 )
+position = Vector2( 432, 56 )
+normal = ExtResource( 7 )
+shape_visible = false
+script = ExtResource( 10 )
+
+[node name="InnerCircle" type="Sprite" parent="TutorialImage/LeftJoystick"]
+self_modulate = Color( 0.337255, 0.439216, 0.772549, 1 )
+texture = ExtResource( 6 )
+offset = Vector2( 64, 64 )
+
+[node name="ShootTutorial3" type="Label" parent="TutorialImage/LeftJoystick"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -189.5
+margin_top = -24.0
+margin_right = 189.5
+margin_bottom = -10.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Tap and hold blue
+thumbstick to move"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="RightJoystick2" type="TouchScreenButton" parent="TutorialImage" groups=["thumbsticks"]]
+self_modulate = Color( 0.258824, 0.678431, 0.72549, 0.501961 )
+position = Vector2( 640, 56 )
+normal = ExtResource( 7 )
+shape_visible = false
+script = ExtResource( 10 )
+
+[node name="InnerCircle" type="Sprite" parent="TutorialImage/RightJoystick2"]
+self_modulate = Color( 1, 0.290196, 0.258824, 1 )
+texture = ExtResource( 6 )
+offset = Vector2( 64, 64 )
+
+[node name="ShootTutorial3" type="Label" parent="TutorialImage/RightJoystick2"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -189.5
+margin_top = -40.0
+margin_right = 189.5
+margin_bottom = -4.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "Tap and hold red
+thumbstick to
+aim and shoot"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Explanation" type="Label" parent="TutorialImage/RightJoystick2"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -248.0
+margin_top = 272.0
+margin_right = 142.0
+margin_bottom = 386.0
+grow_horizontal = 2
+theme = ExtResource( 5 )
+text = "For anyone WONDERING,
+THEY ARE NOT ZOMBIES. THE GREEN
+ENEMIES ARE SLIMES. THAT'S WHY THEY'RE
+SHINY AND SMOOTH. THANKS FOR YOUR
+UNDERSTANDING.
+
+I hope you will enjoy the game even
+just a little. i've put much work into it."
+align = 1
+valign = 1
+uppercase = true
+
+[node name="Body" type="Sprite" parent="TutorialImage"]
+position = Vector2( 920, 288 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 18 )
+
+[node name="Head" type="Sprite" parent="TutorialImage/Body"]
+texture = ExtResource( 19 )
+
+[node name="LeftArm" type="Sprite" parent="TutorialImage/Body"]
+texture = ExtResource( 21 )
+
+[node name="RightArm" type="Sprite" parent="TutorialImage/Body"]
+texture = ExtResource( 20 )
+
+[connection signal="pressed" from="ColorRect/PlayGameButton" to="ColorRect/PlayGameButton" method="_on_Button_pressed"]
+[connection signal="button_up" from="ColorRect/OpenTutorialButton" to="." method="_on_Button2_button_up"]
+[connection signal="button_up" from="TutorialImage/CloseTutorialButton" to="." method="_on_CloseTutorialButton_button_up"]

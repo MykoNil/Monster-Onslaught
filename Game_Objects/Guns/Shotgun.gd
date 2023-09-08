@@ -12,12 +12,17 @@ func _ready():
 	shots_per_second = bullet_info.shots_per_second
 	hits_per_shot = bullet_info.hits_per_shot
 	damage = bullet_info.damage_per_shot * 4
-	cost = 20
+	cost = 350
+	
+	# Bullet overrides
+	bullet_damage = 10
+	bullet_hp = 3
+	bullet_knockback_strength = 15 * 60 # x pixels per frame (converted into pixels per second)
 	
 	# Gun clips/ammo
 	clip_max_size = 5 # 4 bullets per shot, so 20 bullets = (20 / 4) = 5 shots per clip ---- Maybe just do it as cartridges
 	clip_size = clip_max_size
-	ammo = 25
+	ammo = clip_size * 5
 #	print(damage)
 #	print(bullet_info)
 	
@@ -41,7 +46,7 @@ func shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_dir
 		rotate_vector(point_from_gun_to_muzzle, 5),
 		rotate_vector(point_from_gun_to_muzzle, -5),
 	]
-	.shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, bullet_directions)
+	.shoot_gun(look_direction, point_from_gun_to_mouse, bullet_scene, 	bullet_directions)
 	
 #	trigger_released = false
 

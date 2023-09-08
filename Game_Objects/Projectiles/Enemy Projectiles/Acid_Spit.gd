@@ -9,12 +9,19 @@ var attack_status_effects = {
 
 func _ready():
 	speed = 300
-	damage = 3
+	damage = 10#3
 	pierce = 0
 #	attack_effectors = { # {"effect name" : [damage, seconds active]}
 #		"poison" : [1]
 #	}
 #	damage_effects = ["poison"]
+
+func initialize():
+#	print("Craup")
+#	damage = 5
+#	pierce = 10
+	bullet_life_time = 5
+
 
 func bullet_hit_object(body):
 	bullet.can_hit = false
